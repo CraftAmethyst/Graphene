@@ -34,7 +34,6 @@ public final class ClothConfigScreenFactory {
 
         SubCategoryBuilder fps = eb.startSubCategory(Component.translatable("graphene.gui.title.render.fps"));
         fps.add(bool(eb, "graphene.gui.name.render.fps.fpsoo", CoolConfig.fpsoo));
-        fps.add(intSlider(eb, "graphene.gui.name.render.fps.udt", 10, 360, CoolConfig.UDT));
         render.addEntry(fps.build());
 
         SubCategoryBuilder leaf = eb.startSubCategory(Component.translatable("graphene.gui.title.render.leaf"));

@@ -21,7 +21,6 @@
   "graphene.gui.name.high.fplerp": "Fix Projectile Interpolation",
   "graphene.gui.name.render.skip": "Skip Outline for Non-Glowing Entities",
   "graphene.gui.name.render.fps.fpsoo": "Reduce Render Latency",
-  "graphene.gui.name.render.fps.udt": "Enter Screen Refresh Rate",
   "graphene.gui.name.render.leaf.ualc": "Advanced Leaf Culling",
   "graphene.gui.name.render.leaf.mlc": "Min Leaf Connections",
   "graphene.gui.name.render.leaf.om": "Optimize Mangroves",

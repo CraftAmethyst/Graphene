@@ -21,7 +21,6 @@
   "graphene.gui.name.high.fplerp": "Åtgärda projektilinterpolation",
   "graphene.gui.name.render.skip": "Hoppa över kontur för icke-ljusentiteter",
   "graphene.gui.name.render.fps.fpsoo": "Minska renderingsfördröjning",
-  "graphene.gui.name.render.fps.udt": "Ange skärmens uppdateringsfrekvens",
   "graphene.gui.name.render.leaf.ualc": "Avancerad lövfrustummering",
   "graphene.gui.name.render.leaf.mlc": "Minimalt lövsammanhang",
   "graphene.gui.name.render.leaf.om": "Optimera mangrove",

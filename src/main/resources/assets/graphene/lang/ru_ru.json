@@ -21,7 +21,6 @@
   "graphene.gui.name.high.fplerp": "Исправить интерполяцию снарядов",
   "graphene.gui.name.render.skip": "Пропускать контур не-светящихся сущностей",
   "graphene.gui.name.render.fps.fpsoo": "Снизить задержку рендеринга",
-  "graphene.gui.name.render.fps.udt": "Введите частоту обновления экрана",
   "graphene.gui.name.render.leaf.ualc": "Продвинутое отсечение листвы",
   "graphene.gui.name.render.leaf.mlc": "Минимум соединений листвы",
   "graphene.gui.name.render.leaf.om": "Оптимизация мангров",

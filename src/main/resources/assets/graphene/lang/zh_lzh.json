@@ -21,7 +21,6 @@
   "graphene.gui.name.high.fplerp": "正拋射之補間",
   "graphene.gui.name.render.skip": "無光實體不繪邊",
   "graphene.gui.name.render.fps.fpsoo": "減繪事之延",
-  "graphene.gui.name.render.fps.udt": "書屏刷新之數",
   "graphene.gui.name.render.leaf.ualc": "高階葉影剔除",
   "graphene.gui.name.render.leaf.mlc": "少葉相連",
   "graphene.gui.name.render.leaf.om": "優紅樹林",

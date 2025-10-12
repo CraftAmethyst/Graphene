@@ -42,8 +42,6 @@
     "client.renderer.particle.ParticleAccessor",
     "client.renderer.reflex.ReflexSchedulerMixin",
     "client.renderer.skip.GameRendererMixin",
-    "client.renderer.skip.MinecraftMixin",
-    "client.renderer.skip.RenderSystemMixin",
     "client.renderer.sky.MixinWorldRenderer",
     "MemoryLeakFix.client.ScreenshotByteBufferLeakFixMixin"
   ],

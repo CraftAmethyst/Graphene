@@ -2,7 +2,6 @@
 package net.carbonmc.graphene.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.commons.math3.optim.MaxIter;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +31,6 @@ public class CoolConfig {
     public static final ForgeConfigSpec.BooleanValue FIX_PEARL_LEAK;
     public static final ForgeConfigSpec.BooleanValue FIX_PROJECTILE_LERP;
     // ==================== 渲染优化 | Rendering Optimization ====================
-    public static final ForgeConfigSpec.IntValue UDT;
     public static final ForgeConfigSpec.BooleanValue BambooLight;
     public static final ForgeConfigSpec.BooleanValue REDUCE_FPS_WHEN_INACTIVE;
     public static final ForgeConfigSpec.IntValue INACTIVE_FPS_LIMIT;
@@ -166,10 +164,6 @@ public class CoolConfig {
         fpsoo = BUILDER
                 .comment("减少渲染延迟，把「把最终画面从 MC 的离屏 FBO（MainTarget）拷贝到屏幕」这一步，由“画一个全屏三角形”改成了“一次 GPU 内部的 glBlitFramebuffer 指令”")
                 .define("fpsoo", true);
-        UDT = BUILDER.comment(
-                        "输入显示器刷新率",
-                        "可能提升显示出来的帧率，但实际仍为您显示器能处理的部分，哪怕不使用这个功能也是如此")
-                .defineInRange("minConnections", 60, 10, 360);
         BUILDER.pop();
         BUILDER.push("chest_optimization");
 

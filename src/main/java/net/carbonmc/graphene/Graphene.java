@@ -1,11 +1,11 @@
 package net.carbonmc.graphene;
+
 import net.carbonmc.graphene.client.GrapheneClient;
-import net.carbonmc.graphene.config.CoolConfig;
 import net.carbonmc.graphene.command.KillMobsCommand;
+import net.carbonmc.graphene.config.CoolConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
@@ -24,7 +24,7 @@ import org.spongepowered.asm.launch.MixinBootstrap;
 public class Graphene {
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MODID = "graphene";
-	public static final String VERSION = "2.0.5";
+	public static final String VERSION = "2.0.6";
 	public Graphene() {
 		var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		var forgeEventBus = MinecraftForge.EVENT_BUS;

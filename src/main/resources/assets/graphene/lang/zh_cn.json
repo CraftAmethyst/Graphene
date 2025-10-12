@@ -21,7 +21,6 @@
   "graphene.gui.name.high.fplerp": "修复抛射物插值",
   "graphene.gui.name.render.skip": "无发光实体跳过轮廓",
   "graphene.gui.name.render.fps.fpsoo": "降低渲染延迟",
-  "graphene.gui.name.render.fps.udt": "填写屏幕刷新率",
   "graphene.gui.name.render.leaf.ualc": "高级树叶剔除",
   "graphene.gui.name.render.leaf.mlc": "最小树叶连接",
   "graphene.gui.name.render.leaf.om": "优化红树林",
