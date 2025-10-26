@@ -23,6 +23,7 @@ public abstract class MixinStructureTemplate {
     private CompoundTag onSave(CompoundTag original) {
         return KryoNBTUtil.optimizeWrite(original);
     }
+
     @Inject(
             method = "load(Lnet/minecraft/core/HolderGetter;Lnet/minecraft/nbt/CompoundTag;)V",
             at = @At("HEAD")

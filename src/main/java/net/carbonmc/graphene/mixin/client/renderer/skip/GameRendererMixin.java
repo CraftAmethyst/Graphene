@@ -25,7 +25,7 @@ public abstract class GameRendererMixin {
             return;
         }
 
-        RenderTarget target = (RenderTarget)(Object)this;
+        RenderTarget target = (RenderTarget) (Object) this;
         int srcFbo = target.frameBufferId;
 
         GlStateManager._glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, srcFbo);

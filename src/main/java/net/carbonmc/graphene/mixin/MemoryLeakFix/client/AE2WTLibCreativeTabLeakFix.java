@@ -18,12 +18,13 @@ public class AE2WTLibCreativeTabLeakFix {
     @Shadow
     @Final
     private static List<ItemStack> items;
+
     @Inject(method = "init", at = @At("HEAD"))
     private static void graphene$clearOnInit(CallbackInfo ci) {
-        if(CoolConfig.MemoryLeakFix_AE2WTLibCreativeTabLeakFix.get()){
-        synchronized (items) {
-            items.clear();
-        }
+        if (CoolConfig.MemoryLeakFix_AE2WTLibCreativeTabLeakFix.get()) {
+            synchronized (items) {
+                items.clear();
+            }
         }
     }
 }

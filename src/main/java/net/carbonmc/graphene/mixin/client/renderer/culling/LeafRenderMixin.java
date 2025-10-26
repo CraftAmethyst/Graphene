@@ -1,5 +1,6 @@
-package net.carbonmc.graphene.mixin.client.culling;
+package net.carbonmc.graphene.mixin.client.renderer.culling;
 
+import net.carbonmc.graphene.config.CoolConfig;
 import net.carbonmc.graphene.engine.cull.LeafOptiEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,6 +20,9 @@ public abstract class LeafRenderMixin {
                                            BlockPos pos, Direction face,
                                            BlockPos offsetPos,
                                            CallbackInfoReturnable<Boolean> cir) {
+        if (!CoolConfig.enableleafCulling.get()) {
+            return;
+        }
         if (state.getBlock() instanceof LeavesBlock) {
             cir.setReturnValue(!LeafOptiEngine.shouldCullFace(level, pos, face));
         }

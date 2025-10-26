@@ -16,12 +16,14 @@ import java.lang.ref.Cleaner;
 @Mixin(RenderTarget.class)
 @OnlyIn(Dist.CLIENT)
 public abstract class FramebufferMixin implements FramebufferFixer {
-    @Shadow protected int colorTextureId;
-    @Shadow protected int depthBufferId;
-    @Shadow public    int frameBufferId;
-
     private static final Cleaner CLEANER = Cleaner.create();
     private final Cleaner.Cleanable cleanable;
+    @Shadow
+    public int frameBufferId;
+    @Shadow
+    protected int colorTextureId;
+    @Shadow
+    protected int depthBufferId;
 
     public FramebufferMixin() {
         this.cleanable = CLEANER.register(this, new CleanupAction(() ->

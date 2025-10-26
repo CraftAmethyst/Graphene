@@ -14,7 +14,8 @@ import java.util.Set;
 
 @Mixin(JigsawBlockEntity.class)
 public abstract class MixinJigsawBlockEntity {
-    @Unique private CompoundTag kryo$cachedTag;
+    @Unique
+    private CompoundTag kryo$cachedTag;
 
     @Inject(method = "saveAdditional", at = @At("HEAD"), cancellable = true)
     private void onSave(CompoundTag tag, CallbackInfo ci) {

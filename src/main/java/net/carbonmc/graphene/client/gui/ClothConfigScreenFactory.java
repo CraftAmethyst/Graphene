@@ -13,8 +13,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
+
 @OnlyIn(Dist.CLIENT)
 public final class ClothConfigScreenFactory {
+
+    private ClothConfigScreenFactory() {
+    }
 
     public static Screen create(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create()
@@ -32,21 +36,23 @@ public final class ClothConfigScreenFactory {
         ConfigCategory render = builder.getOrCreateCategory(Component.translatable("graphene.gui.title.render"));
         render.addEntry(bool(eb, "graphene.gui.name.render.skip", CoolConfig.skipOutlineWhenNoGlowing));
 
+
         SubCategoryBuilder fps = eb.startSubCategory(Component.translatable("graphene.gui.title.render.fps"));
         fps.add(bool(eb, "graphene.gui.name.render.fps.fpsoo", CoolConfig.fpsoo));
         render.addEntry(fps.build());
 
-        SubCategoryBuilder leaf = eb.startSubCategory(Component.translatable("graphene.gui.title.render.leaf"));
-        leaf.add(bool(eb, "graphene.gui.name.render.leaf.ualc", CoolConfig.useAdvancedLeafCulling));
-        leaf.add(intSlider(eb, "graphene.gui.name.render.leaf.mlc", 1, 6, CoolConfig.minLeafConnections));
-        leaf.add(bool(eb, "graphene.gui.name.render.leaf.om", CoolConfig.OPTIMIZE_MANGROVE));
-        render.addEntry(leaf.build());
-        SubCategoryBuilder trace = eb.startSubCategory(Component.translatable("graphene.gui.title.render.trace"));
-        trace.add(intSlider(eb, "graphene.gui.name.render.trace.tT", 1, 8, CoolConfig.tracingThreads));
-        trace.add(doubleField(eb, "graphene.gui.name.render.trace.tD", 1, 16, CoolConfig.traceDistance));
-        trace.add(doubleField(eb, "graphene.gui.name.render.trace.fbD", 4, 32, CoolConfig.fallbackDistance));
-        render.addEntry(trace.build());
+        SubCategoryBuilder leafculling = eb.startSubCategory(Component.translatable("graphene.gui.title.render.leafculling"));
+        leafculling.add(bool(eb, "graphene.gui.name.render.leafculling.eab", CoolConfig.enableleafCulling));
+        render.addEntry(leafculling.build());
 
+        SubCategoryBuilder culling = eb.startSubCategory(Component.translatable("graphene.gui.title.render.culling"));
+        culling.add(bool(eb, "graphene.gui.name.render.culling.eC", CoolConfig.enableCulling));
+        culling.add(bool(eb, "graphene.gui.name.render.culling.eEC", CoolConfig.enableEntityCulling));
+        culling.add(bool(eb, "graphene.gui.name.render.culling.eBEC", CoolConfig.enableBlockEntityCulling));
+        culling.add(stringList(eb, "graphene.gui.name.culling.eBl", CoolConfig.entityBlacklist));
+        culling.add(bool(eb, "graphene.gui.name.render.culling.eTS", CoolConfig.enableTickStopping));
+        culling.add(bool(eb, "graphene.gui.name.render.culling.eNTC", CoolConfig.enableNameTagCulling));
+        render.addEntry(culling.build());
         SubCategoryBuilder chest = eb.startSubCategory(Component.translatable("graphene.gui.title.render.chest"));
         chest.add(bool(eb, "graphene.gui.name.render.chest.EO", CoolConfig.ENABLE_OPTIMIZATION));
         chest.add(enumOpt(eb, "graphene.gui.name.render.chest.RM", CoolConfig.RenderMode.class, CoolConfig.RENDER_MODE));
@@ -97,8 +103,8 @@ public final class ClothConfigScreenFactory {
         entity.addEntry(intSlider(eb, "graphene.gui.name.entity.hR", 1, 256, CoolConfig.horizontalRange));
         entity.addEntry(intSlider(eb, "graphene.gui.name.entity.vR", 1, 256, CoolConfig.verticalRange));
         entity.addEntry(stringList(eb, "graphene.gui.name.entity.eW", CoolConfig.entityWhitelist));
-        entity.addEntry(bool(eb, "graphene.gui.name.entity.iDE", CoolConfig.ignoreDeadEntities));
         entity.addEntry(bool(eb, "graphene.gui.name.entity.OEC", CoolConfig.OPTIMIZE_ENTITY_CLEANUP));
+        entity.addEntry(bool(eb, "graphene.gui.name.entity.ite", CoolConfig.ite));
         entity.addEntry(bool(eb, "graphene.gui.name.entity.tRI", CoolConfig.tickRaidersInRaid));
         ConfigCategory item = builder.getOrCreateCategory(Component.translatable("graphene.gui.title.item"));
         item.addEntry(bool(eb, "graphene.gui.name.item.OIO", CoolConfig.OpenIO));
@@ -109,7 +115,7 @@ public final class ClothConfigScreenFactory {
         item.addEntry(bool(eb, "graphene.gui.name.item.sSC", CoolConfig.showStackCount));
         item.addEntry(bool(eb, "graphene.gui.name.item.ENABLED", CoolConfig.ENABLED));
         item.addEntry(intSlider(eb, "graphene.gui.name.item.MSS", 1, 9999, CoolConfig.MAX_STACK_SIZE));
-        item.addEntry(bool(eb, "graphene.gui.name.item.oI", CoolConfig.optimizeItems));
+
 
         ConfigCategory mem = builder.getOrCreateCategory(Component.translatable("graphene.gui.title.mem"));
         mem.addEntry(bool(eb, "graphene.gui.name.mem.MLFAE", CoolConfig.MemoryLeakFix_AE2WTLibCreativeTabLeakFix));
@@ -129,7 +135,6 @@ public final class ClothConfigScreenFactory {
                 .build();
     }
 
-
     private static LongListEntry longField(ConfigEntryBuilder eb,
                                            String key,
                                            long min,
@@ -142,7 +147,6 @@ public final class ClothConfigScreenFactory {
                 .build();
     }
 
-
     private static <E extends Enum<E>> EnumListEntry<E> enumOpt(ConfigEntryBuilder eb,
                                                                 String key,
                                                                 Class<E> clazz,
@@ -152,6 +156,7 @@ public final class ClothConfigScreenFactory {
                 .setSaveConsumer(value::set)
                 .build();
     }
+
     private static StringListListEntry stringList(ConfigEntryBuilder eb,
                                                   String key,
                                                   ForgeConfigSpec.ConfigValue<List<? extends String>> value) {
@@ -161,6 +166,7 @@ public final class ClothConfigScreenFactory {
                 .setSaveConsumer(value::set)
                 .build();
     }
+
     private static IntegerSliderEntry intSlider(ConfigEntryBuilder eb,
                                                 String key,
                                                 int min,
@@ -183,6 +189,4 @@ public final class ClothConfigScreenFactory {
                 .setSaveConsumer(value::set)
                 .build();
     }
-
-    private ClothConfigScreenFactory() {}
 }

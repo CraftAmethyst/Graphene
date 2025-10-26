@@ -16,9 +16,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(LevelRenderer.class)
 public class MixinWorldRenderer {
+    private static final int CHECK_INTERVAL = 5;
     private final BlockPos.MutableBlockPos lastPos = new BlockPos.MutableBlockPos();
     private final AtomicBoolean wasUnderwater = new AtomicBoolean(false);
-    private static final int CHECK_INTERVAL = 5;
     private int tickCounter = 0;
 
     @Inject(

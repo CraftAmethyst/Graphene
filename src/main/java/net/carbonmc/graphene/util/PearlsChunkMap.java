@@ -26,31 +26,12 @@ public final class PearlsChunkMap extends SavedData {
 
     private static final String DATA_NAME = "graphene_pearls";
     private static final Logger LOGGER = LogManager.getLogger();
-    private final SetMultimap<UUID, ChunkPos> map = HashMultimap.create();
     public static PearlsChunkMap INSTANCE;
+    private final SetMultimap<UUID, ChunkPos> map = HashMultimap.create();
+
     public static PearlsChunkMap get(ServerLevel level) {
         return level.getDataStorage()
                 .computeIfAbsent(PearlsChunkMap::load, PearlsChunkMap::new, DATA_NAME);
-    }
-
-    public void add(UUID owner, ChunkPos pos, ServerLevel level) {
-        if (!CoolConfig.FIX_PEARL_LEAK.get()) return;
-        get(level).map.put(owner, pos);
-        level.setChunkForced(pos.x, pos.z, true);
-        get(level).setDirty();
-        if (CoolConfig.DEBUG_LOGGING.get()) {
-            LOGGER.debug("Pearl forced chunk {} in {}", pos, level.dimension().location());
-        }
-    }
-
-    public void remove(UUID owner, ServerLevel level) {
-        PearlsChunkMap data = get(level);
-        Set<ChunkPos> set = data.map.removeAll(owner);
-        if (set != null) {
-            set.forEach(p -> level.setChunkForced(p.x, p.z, false));
-            data.setDirty();
-            LOGGER.debug("Unforced {} chunks for {}", set.size(), owner);
-        }
     }
 
     @SubscribeEvent
@@ -68,22 +49,6 @@ public final class PearlsChunkMap extends SavedData {
                 get(sl).setDirty();
             }
         }
-    }
-
-    @Nonnull
-    @Override
-    public CompoundTag save(@Nonnull CompoundTag tag) {
-        ListTag list = new ListTag();
-        map.asMap().forEach((uuid, poses) -> {
-            CompoundTag entry = new CompoundTag();
-            entry.putUUID("Owner", uuid);
-            ListTag chunks = new ListTag();
-            poses.forEach(p -> chunks.add(StringTag.valueOf(p.toString())));
-            entry.put("Chunks", chunks);
-            list.add(entry);
-        });
-        tag.put("Entries", list);
-        return tag;
     }
 
     public static PearlsChunkMap load(CompoundTag tag) {
@@ -111,5 +76,41 @@ public final class PearlsChunkMap extends SavedData {
             LOGGER.info("Graphene: restored {} forced chunks in {}",
                     data.map.size(), level.dimension().location());
         }
+    }
+
+    public void add(UUID owner, ChunkPos pos, ServerLevel level) {
+        if (!CoolConfig.FIX_PEARL_LEAK.get()) return;
+        get(level).map.put(owner, pos);
+        level.setChunkForced(pos.x, pos.z, true);
+        get(level).setDirty();
+        if (CoolConfig.DEBUG_LOGGING.get()) {
+            LOGGER.debug("Pearl forced chunk {} in {}", pos, level.dimension().location());
+        }
+    }
+
+    public void remove(UUID owner, ServerLevel level) {
+        PearlsChunkMap data = get(level);
+        Set<ChunkPos> set = data.map.removeAll(owner);
+        if (set != null) {
+            set.forEach(p -> level.setChunkForced(p.x, p.z, false));
+            data.setDirty();
+            LOGGER.debug("Unforced {} chunks for {}", set.size(), owner);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public CompoundTag save(@Nonnull CompoundTag tag) {
+        ListTag list = new ListTag();
+        map.asMap().forEach((uuid, poses) -> {
+            CompoundTag entry = new CompoundTag();
+            entry.putUUID("Owner", uuid);
+            ListTag chunks = new ListTag();
+            poses.forEach(p -> chunks.add(StringTag.valueOf(p.toString())));
+            entry.put("Chunks", chunks);
+            list.add(entry);
+        });
+        tag.put("Entries", list);
+        return tag;
     }
 }

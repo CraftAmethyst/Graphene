@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Random;
+
 @OnlyIn(Dist.CLIENT)
 @Mixin(ParticleEngine.class)
 public abstract class MixinParticleEngine {
@@ -47,13 +48,12 @@ public abstract class MixinParticleEngine {
 
         if (distanceSq > threshold * threshold) {
             if (RANDOM.nextDouble() > CoolConfig.LOD_REDUCTION_FACTOR.get()) {
-                // 通过Accessor修改alpha值
-                ((ParticleAccessor)particle).setAlphaAccessor(0.0F);
+                ((ParticleAccessor) particle).setAlphaAccessor(0.0F);
             } else {
-                ((ParticleAccessor)particle).setAlphaAccessor(1.0F);
+                ((ParticleAccessor) particle).setAlphaAccessor(1.0F);
             }
         } else {
-            ((ParticleAccessor)particle).setAlphaAccessor(1.0F);
+            ((ParticleAccessor) particle).setAlphaAccessor(1.0F);
         }
     }
 

@@ -1,62 +1,60 @@
-//此部分代码使用AI优化格式
 package net.carbonmc.graphene.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class CoolConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    public static ForgeConfigSpec SPEC;
-    private static Consumer<Void> changeListener;
-    //粒子
+
     public static final ForgeConfigSpec.BooleanValue ENABLE_PARTICLE_OPTIMIZATION;
     public static final ForgeConfigSpec.BooleanValue ENABLE_PARTICLE_LOD;
     public static final ForgeConfigSpec.DoubleValue LOD_DISTANCE_THRESHOLD;
     public static final ForgeConfigSpec.DoubleValue LOD_REDUCTION_FACTOR;
     public static final ForgeConfigSpec.BooleanValue ENABLE_FIXED_TIMESTEP;
-
     public static final ForgeConfigSpec.DoubleValue FIXED_TIMESTEP_INTERVAL;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOD_PARTICLE_WHITELIST;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LOD_PARTICLE_BLACKLIST;
     public static final ForgeConfigSpec.BooleanValue fpsoo;
     public static final ForgeConfigSpec.BooleanValue ENABLE_FIXED_LIGHT;
     public static final ForgeConfigSpec.BooleanValue enableReflex;
-    public static final ForgeConfigSpec.LongValue   reflexOffsetNs;
+    public static final ForgeConfigSpec.LongValue reflexOffsetNs;
     public static final ForgeConfigSpec.BooleanValue reflexDebug;
     public static final ForgeConfigSpec.IntValue MAX_FPS;
     public static final ForgeConfigSpec.BooleanValue skipOutlineWhenNoGlowing;
     public static final ForgeConfigSpec.BooleanValue FIX_PEARL_LEAK;
     public static final ForgeConfigSpec.BooleanValue FIX_PROJECTILE_LERP;
-    // ==================== 渲染优化 | Rendering Optimization ====================
+    public static final ForgeConfigSpec.BooleanValue ENABLED;
+    public static final ForgeConfigSpec.IntValue MAX_STACK_SIZE;
+    public static final ForgeConfigSpec.BooleanValue MemoryLeakFix_AE2WTLibCreativeTabLeakFix;
+    public static final ForgeConfigSpec.BooleanValue MemoryLeakFix_ScreenshotByteBufferLeakFix;
+    public static final ForgeConfigSpec.BooleanValue DEBUG_LOGGING;
+    public static ForgeConfigSpec.BooleanValue enableleafCulling;
+    public static ForgeConfigSpec.BooleanValue enableCulling;
     public static final ForgeConfigSpec.BooleanValue BambooLight;
     public static final ForgeConfigSpec.BooleanValue REDUCE_FPS_WHEN_INACTIVE;
     public static final ForgeConfigSpec.IntValue INACTIVE_FPS_LIMIT;
     public static final ForgeConfigSpec.BooleanValue REDUCE_RENDER_DISTANCE_WHEN_INACTIVE;
     public static final ForgeConfigSpec.IntValue INACTIVE_RENDER_DISTANCE;
-    public static ForgeConfigSpec.IntValue tracingThreads;
-    public static ForgeConfigSpec.DoubleValue traceDistance;
-    public static ForgeConfigSpec.DoubleValue fallbackDistance;
-    public static ForgeConfigSpec.BooleanValue useAdvancedLeafCulling;
-    public static ForgeConfigSpec.IntValue minLeafConnections;
-    public static final ForgeConfigSpec.BooleanValue OPTIMIZE_MANGROVE;
     public static final ForgeConfigSpec.BooleanValue ENABLE_OPTIMIZATION;
     public static final ForgeConfigSpec.EnumValue<RenderMode> RENDER_MODE;
     public static final ForgeConfigSpec.BooleanValue OPTIMIZE_ENDER_CHESTS;
     public static final ForgeConfigSpec.BooleanValue OPTIMIZE_TRAPPED_CHESTS;
     public static final ForgeConfigSpec.IntValue MAX_RENDER_DISTANCE;
-    // ==================== 实体优化 | Entity Optimization ====================
-    public static ForgeConfigSpec.BooleanValue optimizeEntities;
     public static final ForgeConfigSpec.BooleanValue OPTIMIZE_ENTITY_CLEANUP;
+    public static ForgeConfigSpec.BooleanValue enableEntityCulling;
+    public static ForgeConfigSpec.BooleanValue enableBlockEntityCulling;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> entityBlacklist;
+    public static ForgeConfigSpec.BooleanValue enableTickStopping;
+    public static ForgeConfigSpec.BooleanValue enableNameTagCulling;
+    public static ForgeConfigSpec.BooleanValue optimizeEntities;
+    public static ForgeConfigSpec.BooleanValue ite;
     public static ForgeConfigSpec.IntValue horizontalRange;
     public static ForgeConfigSpec.IntValue verticalRange;
-    public static ForgeConfigSpec.BooleanValue ignoreDeadEntities;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> entityWhitelist;
     public static ForgeConfigSpec.BooleanValue tickRaidersInRaid;
-
-    // ==================== 物品优化 | Item Optimization ====================
     public static ForgeConfigSpec.BooleanValue OpenIO;
     public static ForgeConfigSpec.IntValue maxStackSize;
     public static ForgeConfigSpec.DoubleValue mergeDistance;
@@ -64,25 +62,17 @@ public class CoolConfig {
     public static ForgeConfigSpec.IntValue listMode;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> itemList;
     public static ForgeConfigSpec.BooleanValue showStackCount;
-    public static final ForgeConfigSpec.BooleanValue ENABLED;
-    public static final ForgeConfigSpec.IntValue MAX_STACK_SIZE;
-    public static ForgeConfigSpec.BooleanValue optimizeItems;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> itemWhitelist;
-
-    // ==================== 内存优化 | Memory Optimization ====================
-    public static final ForgeConfigSpec.BooleanValue MemoryLeakFix_AE2WTLibCreativeTabLeakFix;
-    public static final ForgeConfigSpec.BooleanValue MemoryLeakFix_ScreenshotByteBufferLeakFix;
-    public static final ForgeConfigSpec.BooleanValue DEBUG_LOGGING;
-    // ==================== NoLog项 | NoLog Options ====================
     public static ForgeConfigSpec.BooleanValue NoOpenGLError;
+    public static ForgeConfigSpec SPEC;
+
     static {
         BUILDER.push("减少不必要的日志 | NoLog");
         NoOpenGLError = BUILDER
                 .comment("取消OpenGL错误日志")
                 .define("disable opengl error log", true);
         BUILDER.pop();
-        BUILDER.push("Math");
-        BUILDER.pop();
+
         BUILDER.push("Light");
         ENABLE_FIXED_LIGHT = BUILDER
                 .comment("光照优化")
@@ -91,6 +81,7 @@ public class CoolConfig {
                 .comment("竹子光照优化")
                 .define("enablebambooFixedLight", true);
         BUILDER.pop();
+
         BUILDER.push("Reflex");
         enableReflex = BUILDER
                 .comment("启用类似 NVIDIA Reflex 的动态低延迟调度")
@@ -106,6 +97,7 @@ public class CoolConfig {
                 .comment("在日志中输出每帧等待时间，方便调试")
                 .define("reflexDebug", false);
         BUILDER.pop();
+
         BUILDER.push("粒子优化 | particle Optimization");
         ENABLE_PARTICLE_OPTIMIZATION = BUILDER.comment(
                         "启用粒子系统优化",
@@ -139,7 +131,7 @@ public class CoolConfig {
 
         LOD_PARTICLE_WHITELIST = BUILDER.comment(
                         "始终应用LOD的粒子类型 (即使不在低优先级列表)",
-                        "particle types that always use LOD (even if not low priority)")
+                        "particle types that always use LOD (even iface not low priority)")
                 .defineList("lodParticleWhitelist",
                         List.of("minecraft:rain", "minecraft:smoke"),
                         o -> o instanceof String);
@@ -151,22 +143,53 @@ public class CoolConfig {
                         List.of("minecraft:portal", "minecraft:enchant"),
                         o -> o instanceof String);
 
-        BUILDER.pop(); // 粒子优化
+        BUILDER.pop();
+
+        BUILDER.comment("树叶剔除")
+                .push("leaf culling");
+        enableleafCulling = BUILDER
+                .comment("enableleafculling")
+                .define("enableCulling", true);
+
+        BUILDER.comment("实体剔除")
+                .push("culling");
+        enableCulling = BUILDER
+                .comment("Master switch for entity culling functionality. If disabled, all culling features are turned off.")
+                .define("enableCulling", true);
+        enableEntityCulling = BUILDER
+                .comment("Enable entity culling")
+                .define("enableEntityCulling", true);
+        enableBlockEntityCulling = BUILDER
+                .comment("Enable shapes entity culling")
+                .define("enableBlockEntityCulling", true);
+        entityBlacklist = BUILDER
+                .comment("Entity blacklist using namespace patterns (e.g. 'minecraft:*' to blacklist all vanilla entities)")
+                .defineList("entityBlacklist",
+                        Arrays.asList("minecraft:player", "minecraft:villager"),
+                        obj -> obj instanceof String);
+        enableTickStopping = BUILDER
+                .comment("Stop ticking for culled entities")
+                .define("enableTickStopping", false);
+        enableNameTagCulling = BUILDER
+                .comment("Cull name tags for hidden entities")
+                .define("enableNameTagCulling", true);
+        BUILDER.pop();
+
         BUILDER.push("高版本mc优化移植");
-        FIX_PEARL_LEAK   = BUILDER.define("fixPearlChunkLeak", true);
+        FIX_PEARL_LEAK = BUILDER.define("fixPearlChunkLeak", true);
         FIX_PROJECTILE_LERP = BUILDER.define("fixProjectileInterpolation", true);
         BUILDER.pop();
-        // ==================== 渲染优化设置 | Rendering Optimization Settings ====================
+
         BUILDER.push("渲染优化 | Rendering Optimization");
         skipOutlineWhenNoGlowing = BUILDER
                 .comment("Skip outline rendering when no glowing entities are in view")
                 .define("skipOutlineWhenNoGlowing", true);
         fpsoo = BUILDER
-                .comment("减少渲染延迟，把「把最终画面从 MC 的离屏 FBO（MainTarget）拷贝到屏幕」这一步，由“画一个全屏三角形”改成了“一次 GPU 内部的 glBlitFramebuffer 指令”")
+                .comment("减少渲染延迟")
                 .define("fpsoo", true);
         BUILDER.pop();
-        BUILDER.push("chest_optimization");
 
+        BUILDER.push("chest_optimization");
         ENABLE_OPTIMIZATION = BUILDER
                 .comment("Enable chest rendering optimization")
                 .define("enableOptimization", true);
@@ -186,38 +209,8 @@ public class CoolConfig {
         MAX_RENDER_DISTANCE = BUILDER
                 .comment("Max render distance in chunks")
                 .defineInRange("maxRenderDistance", 32, 1, 128);
-
         BUILDER.pop();
-        // 树叶优化
-        BUILDER.push("树叶优化 | Leaf Optimization");
-        useAdvancedLeafCulling = BUILDER.comment(
-                        "使用高级树叶剔除算法",
-                        "Use advanced leaf culling algorithm")
-                .define("advancedLeafCulling", true);
-        minLeafConnections = BUILDER.comment(
-                        "简单剔除所需的最小树叶连接数 (1-6)",
-                        "Minimum connected leaves for simple culling (1-6)")
-                .defineInRange("minConnections", 2, 1, 6);
-        OPTIMIZE_MANGROVE = BUILDER.comment(
-                        "启用红树林根优化",
-                        "Enable mangrove roots optimization")
-                .define("optimizeMangrove", true);
-        BUILDER.pop(); // 树叶优化
-        BUILDER.push("路径追踪 | Path Tracing");
-        tracingThreads = BUILDER.comment(
-                        "路径追踪线程数 (1-8)",
-                        "Number of threads for path tracing (1-8)")
-                .defineInRange("tracingThreads", 4, 1, 8);
-        traceDistance = BUILDER.comment(
-                        "最大追踪距离（方块）",
-                        "Max tracing distance in blocks")
-                .defineInRange("traceDistance", 6.0, 1.0, 16.0);
-        fallbackDistance = BUILDER.comment(
-                        "回退简单剔除距离（方块）",
-                        "Fallback simple culling distance in blocks")
-                .defineInRange("fallbackDistance", 16.0, 4.0, 32.0);
-        BUILDER.pop(); // 路径追踪
-        // 非活动状态优化
+
         BUILDER.push("非活动状态优化 | Inactive Optimization");
         REDUCE_FPS_WHEN_INACTIVE = BUILDER.comment(
                         "窗口非活动时降低FPS",
@@ -235,13 +228,9 @@ public class CoolConfig {
                         "非活动状态渲染距离 (2-12)",
                         "Render distance when window is inactive (2-12)")
                 .defineInRange("inactiveRenderDistance", 2, 2, 12);
-        BUILDER.pop(); // 非活动状态优化
+        BUILDER.pop();
 
-
-        // ==================== 实体优化设置 | Entity Optimization Settings ====================
         BUILDER.comment("实体优化 | Entity Optimization").push("entity_optimization");
-
-
         BUILDER.push("实体Tick优化 | Entity Tick Optimization");
         optimizeEntities = BUILDER.comment(
                         "启用实体tick优化",
@@ -256,13 +245,10 @@ public class CoolConfig {
                         "垂直检测范围(方块)",
                         "Vertical detection range (blocks)")
                 .defineInRange("verticalRange", 32, 1, 256);
-        ignoreDeadEntities = BUILDER.comment(
-                        "忽略已死亡的实体",
-                        "Ignore dead entities")
-                .define("ignoreDeadEntities", false);
-
-
-        BUILDER.pop(); // 实体Tick优化
+        ite = BUILDER
+                .comment("停止tick实体取消渲染")
+                .define("ite", true);
+        BUILDER.pop();
 
         BUILDER.push("实体白名单 | Entity Whitelist");
         OPTIMIZE_ENTITY_CLEANUP = BUILDER.comment(
@@ -273,18 +259,16 @@ public class CoolConfig {
                         "实体白名单（始终不优化）",
                         "Entity whitelist (always optimized)")
                 .defineList("entityWhitelist", List.of("minecraft:ender_dragon"), o -> true);
-        BUILDER.pop(); // 实体白名单
+        BUILDER.pop();
 
         BUILDER.push("袭击事件 | Raid Events");
         tickRaidersInRaid = BUILDER.comment(
                         "在袭击中保持袭击者tick",
                         "Keep raider ticking during raids")
                 .define("tickRaidersInRaid", true);
-        BUILDER.pop(); // 袭击事件
+        BUILDER.pop();
 
-        BUILDER.pop(); // 实体优化
-
-        // ==================== 物品优化设置 | Item Optimization Settings ====================
+        BUILDER.pop();
         BUILDER.comment("物品优化 | Item Optimization").push("item_optimization");
 
         OpenIO = BUILDER.comment(
@@ -309,7 +293,7 @@ public class CoolConfig {
                         "当物品堆叠达到最大时锁定，不再参与合并",
                         "Lock stacks that have reached the maximum size to prevent further merging")
                 .define("lockMaxedStacks", true);
-        BUILDER.pop(); // 堆叠合并
+        BUILDER.pop();
 
         BUILDER.push("自定义堆叠 | Custom Stack Size");
         ENABLED = BUILDER.comment(
@@ -319,8 +303,8 @@ public class CoolConfig {
         MAX_STACK_SIZE = BUILDER.comment(
                         "最大物品堆叠大小 (1-9999)",
                         "Maximum item stack size (1-9999)")
-                .defineInRange("maxStackSize",64 , 1, 9999);
-        BUILDER.pop(); // 自定义堆叠
+                .defineInRange("maxStackSize", 64, 1, 9999);
+        BUILDER.pop();
 
         BUILDER.push("物品列表 | Item Lists");
         listMode = BUILDER.comment(
@@ -331,34 +315,27 @@ public class CoolConfig {
                         "白名单/黑名单中的物品注册名列表",
                         "Item registry names for whitelist/blacklist")
                 .defineList("itemList", Collections.emptyList(), o -> o instanceof String);
-        BUILDER.pop(); // 物品列表
+        BUILDER.pop();
 
         BUILDER.push("物品实体 | Item Entities");
-        optimizeItems = BUILDER.comment(
-                        "优化物品实体tick",
-                        "Optimize item entity ticking")
-                .define("optimizeItems", false);
         itemWhitelist = BUILDER.comment(
                         "物品实体白名单",
                         "Item entity whitelist")
                 .defineList("itemWhitelist", List.of("minecraft:diamond"), o -> true);
-        BUILDER.pop(); // 物品实体
+        BUILDER.pop();
 
-        BUILDER.pop(); // 物品优化
+        BUILDER.pop();
 
-        // ==================== 内存优化设置 | Memory Optimization Settings ====================
         BUILDER.comment("内存优化 | Memory Optimization").push("memory_optimization");
         MemoryLeakFix_AE2WTLibCreativeTabLeakFix = BUILDER.comment(
                         "内存泄漏修复_AE2WTLibCreativeTabLeakFix",
                         "MemoryLeakFix_AE2WTLib")
                 .define("enablememoryleakfixae2", true);
-       MemoryLeakFix_ScreenshotByteBufferLeakFix = BUILDER.comment(
+        MemoryLeakFix_ScreenshotByteBufferLeakFix = BUILDER.comment(
                         "内存泄漏修复_ScreenshotByteBufferLeakFix",
                         "MemoryLeakFix_ScreenshotByteBufferLeakFix")
                 .define("enablememoryleakfixScreenshotByteBufferLeakFix", true);
-        BUILDER.pop(); // 内存优化
-
-        // ==================== 调试设置 | Debug Settings ====================
+        BUILDER.pop();
         BUILDER.comment("调试选项 | Debug Options").push("debug");
 
         DEBUG_LOGGING = BUILDER.comment(
@@ -366,22 +343,34 @@ public class CoolConfig {
                         "Enable debug logging")
                 .define("debug", false);
 
-        BUILDER.pop(); // 调试选项
+        BUILDER.pop();
 
         SPEC = BUILDER.build();
     }
 
-
-    public static boolean optimizeMangrove() {
-        return OPTIMIZE_MANGROVE.get();
+    public static boolean isCullingEnabled() {
+        return enableCulling.get();
     }
 
-
-    public static double getTraceDistance() {
-        return traceDistance.get();
+    public static boolean isEntityCullingEnabled() {
+        return isCullingEnabled() && enableEntityCulling.get();
     }
 
+    public static boolean isBlockEntityCullingEnabled() {
+        return isCullingEnabled() && enableBlockEntityCulling.get();
+    }
 
+    public static boolean isTickStoppingEnabled() {
+        return isCullingEnabled() && enableTickStopping.get();
+    }
+
+    public static boolean isNameTagCullingEnabled() {
+        return isCullingEnabled() && enableNameTagCulling.get();
+    }
+
+    public static List<? extends String> getEntityBlacklist() {
+        return entityBlacklist.get();
+    }
     public enum RenderMode {
         SIMPLE, VANILLA
     }

@@ -28,15 +28,15 @@ public abstract class ReflexSchedulerMixin {
     private static final int MODE_DISABLED = 0;
     private static final int MODE_TIMESTAMP = 1;
     private static final int MODE_ELAPSED = 2;
-
-    @Shadow @Final private Minecraft minecraft;
     private static final Logger LOGGER = LogManager.getLogger("Graphene-Reflex");
     private static final long MAX_WAIT_NS = 2_000_000L;
     private static final long MIN_FRAME_NS = 1_000_000L;
     private static final double SMOOTH_ALPHA = 0.15;
-
-    private int timingMode = MODE_DISABLED;
     private final int[] queryIds = new int[2];
+    @Shadow
+    @Final
+    private Minecraft minecraft;
+    private int timingMode = MODE_DISABLED;
     private int queryIndex = 0;
 
     private long lastGpuDoneNs = -1L;
@@ -169,9 +169,12 @@ public abstract class ReflexSchedulerMixin {
 
     private String timingModeToString() {
         switch (timingMode) {
-            case MODE_TIMESTAMP: return "TIMESTAMP";
-            case MODE_ELAPSED: return "ELAPSED";
-            default: return "DISABLED";
+            case MODE_TIMESTAMP:
+                return "TIMESTAMP";
+            case MODE_ELAPSED:
+                return "ELAPSED";
+            default:
+                return "DISABLED";
         }
     }
 }

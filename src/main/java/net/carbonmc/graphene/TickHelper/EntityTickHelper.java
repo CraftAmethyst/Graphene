@@ -17,22 +17,24 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 @Mod.EventBusSubscriber
 public final class EntityTickHelper {
-    private static volatile boolean enabled                 = true;
-    private static volatile boolean tickRaidersInRaid       = true;
-    private static volatile int horizontalRange             = 32;
-    private static volatile int verticalRange               = 16;
-    private static volatile boolean ignoreDeadEntities      = true; // 新增配置项
-
     private static final AtomicReference<Set<EntityType<?>>> WHITE_LIST = new AtomicReference<>(Collections.emptySet());
     private static final AtomicReference<Set<EntityType<?>>> BLACK_LIST = new AtomicReference<>(Collections.emptySet());
     private static final List<WildcardPattern> WHITE_PATTERNS = new ArrayList<>();
     private static final List<WildcardPattern> BLACK_PATTERNS = new ArrayList<>();
+    private static final boolean ignoreDeadEntities = true;
+    private static volatile boolean enabled = true;
+    private static volatile boolean tickRaidersInRaid = true;
+    private static volatile int horizontalRange = 32;
+    private static volatile int verticalRange = 16;
 
     static {
         reloadConfig();
@@ -47,11 +49,9 @@ public final class EntityTickHelper {
         if (!enabled) return false;
         if (!(entity instanceof LivingEntity living)) return false;
 
-        // 死亡实体拥有绝对豁免权
         if (ignoreDeadEntities && !living.isAlive()) {
             return false;
         }
-
         if (!living.isAlive()) return true;
 
         EntityType<?> type = entity.getType();
@@ -62,15 +62,15 @@ public final class EntityTickHelper {
             return false;
         }
         if (tickRaidersInRaid && isRaiderInRaid(living)) return false;
+
         return !isNearPlayer(living);
     }
 
     private static void reloadConfig() {
-        enabled               = CoolConfig.optimizeEntities.get();
-        tickRaidersInRaid     = CoolConfig.tickRaidersInRaid.get();
-        horizontalRange       = CoolConfig.horizontalRange.get();
-        verticalRange         = CoolConfig.verticalRange.get();
-        ignoreDeadEntities    = CoolConfig.ignoreDeadEntities.get(); // 从配置加载
+        enabled = CoolConfig.optimizeEntities.get();
+        tickRaidersInRaid = CoolConfig.tickRaidersInRaid.get();
+        horizontalRange = CoolConfig.horizontalRange.get();
+        verticalRange = CoolConfig.verticalRange.get();
         List<? extends String> whiteRaw = CoolConfig.entityWhitelist.get();
 
         Set<EntityType<?>> whiteIds = Sets.newHashSet();
@@ -133,10 +133,12 @@ public final class EntityTickHelper {
 
     private static final class WildcardPattern {
         private final Pattern regex;
+
         WildcardPattern(String raw) {
             String s = raw.replace("?", ".{1}").replace("*", ".*");
             this.regex = Pattern.compile("^" + s + "$");
         }
+
         boolean matches(String str) {
             return regex.matcher(str).matches();
         }

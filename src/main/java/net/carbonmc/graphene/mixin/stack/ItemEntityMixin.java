@@ -22,30 +22,34 @@ import java.util.List;
 public abstract class ItemEntityMixin {
     private static final int MERGE_COOLDOWN_TICKS = 5;
     private static final int DEFAULT_MAX_STACK = Integer.MAX_VALUE - 100;
-
-    @Shadow public abstract ItemStack getItem();
-    @Shadow public abstract void setItem(ItemStack stack);
-    @Shadow public abstract void setExtendedLifetime();
-
     @Unique
     private int lastMergeTick = -1;
+
+    @Shadow
+    public abstract ItemStack getItem();
+
+    @Shadow
+    public abstract void setItem(ItemStack stack);
+
+    @Shadow
+    public abstract void setExtendedLifetime();
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
         if (!shouldProcess()) return;
 
-        ItemEntity self = (ItemEntity)(Object)this;
+        ItemEntity self = (ItemEntity) (Object) this;
         updateStackDisplay(self);
 
         if (shouldAttemptMerge(self)) {
-            lastMergeTick = (int)self.level().getGameTime();
+            lastMergeTick = (int) self.level().getGameTime();
             tryMergeItems(self);
         }
     }
 
     @Unique
     private boolean shouldProcess() {
-        return CoolConfig.OpenIO.get() && !((ItemEntity)(Object)this).level().isClientSide;
+        return CoolConfig.OpenIO.get() && !((ItemEntity) (Object) this).level().isClientSide;
     }
 
     @Unique
@@ -168,6 +172,7 @@ public abstract class ItemEntityMixin {
     private boolean isSameItem(ItemStack a, ItemStack b) {
         return ItemStack.isSameItemSameTags(a, b);
     }
+
     @Unique
     private boolean isMergeAllowed(ItemStack stack, int listMode, List<? extends String> itemList) {
         if (listMode == 0) return true;

@@ -4,10 +4,13 @@ import net.carbonmc.graphene.api.IOptimizableEntity;
 import net.minecraft.world.entity.EntityType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+
 @Mixin(EntityType.class)
 public abstract class EntityTypeMixin implements IOptimizableEntity {
-    @Unique private boolean graphene$alwaysTick;
-    @Unique private boolean graphene$tickInRaid;
+    @Unique
+    private boolean graphene$alwaysTick;
+    @Unique
+    private boolean graphene$tickInRaid;
 
     @Override
     public boolean graphene$shouldAlwaysTick() {

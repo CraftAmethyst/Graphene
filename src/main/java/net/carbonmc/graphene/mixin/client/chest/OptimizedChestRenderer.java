@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 @Mixin(BlockEntityRenderDispatcher.class)
 public abstract class OptimizedChestRenderer {
 
@@ -98,6 +99,7 @@ public abstract class OptimizedChestRenderer {
         }
         return beyond;
     }
+
     private void logDebug(String message) {
         if (CoolConfig.DEBUG_LOGGING.get()) {
             System.out.println("[Graphene] " + message);

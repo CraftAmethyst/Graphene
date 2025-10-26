@@ -1,4 +1,5 @@
 package net.carbonmc.graphene.gl;
+
 public final class CleanupAction implements Runnable {
     private final Runnable cleanupTask;
 

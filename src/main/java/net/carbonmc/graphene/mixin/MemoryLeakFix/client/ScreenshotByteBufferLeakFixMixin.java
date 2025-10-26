@@ -20,7 +20,9 @@ import java.nio.ByteBuffer;
 @Mixin(value = Minecraft.class)
 public class ScreenshotByteBufferLeakFixMixin {
 
-    @Shadow @Final private static Logger LOGGER;
+    @Shadow
+    @Final
+    private static Logger LOGGER;
     @Unique
     private ByteBuffer graphene$buffer = null;
 
@@ -40,7 +42,8 @@ public class ScreenshotByteBufferLeakFixMixin {
         graphene$buffer = buffer;
         return buffer;
     }
-    @Inject(method = "grabHugeScreenshot", at = @At("RETURN"),remap = true)
+
+    @Inject(method = "grabHugeScreenshot", at = @At("RETURN"), remap = true)
     private void graphene$freeOnReturn(CallbackInfoReturnable<Component> cir) {
         if (CoolConfig.MemoryLeakFix_ScreenshotByteBufferLeakFix.get()) {
             if (graphene$buffer != null) {

@@ -17,7 +17,7 @@ public class KillMobsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 Commands.literal("killmobs")
-                        .requires(source -> source.hasPermission(4)) // OP 4级权限
+                        .requires(source -> source.hasPermission(4))
                         .executes(context -> killMobs(context.getSource(), context.getSource().getPlayerOrException()))
                         .then(Commands.argument("targets", EntityArgument.players())
                                 .executes(context -> killMobs(context.getSource(), EntityArgument.getPlayers(context, "targets")))

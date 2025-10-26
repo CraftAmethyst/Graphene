@@ -1,4 +1,4 @@
-package net.carbonmc.graphene.mixin.client.renderer.other;
+package net.carbonmc.graphene.mixin.client.renderer.vertex;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import org.joml.Matrix3f;

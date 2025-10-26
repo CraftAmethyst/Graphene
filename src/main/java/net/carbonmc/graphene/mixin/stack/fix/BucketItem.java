@@ -27,8 +27,8 @@ public abstract class BucketItem {
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     private void onUse(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir, ItemStack itemStack) {
-        net.minecraft.world.item.BucketItem bucket = (net.minecraft.world.item.BucketItem)(Object)this;
-        Fluid content = ((BucketItemAccessor)bucket).getContent();
+        net.minecraft.world.item.BucketItem bucket = (net.minecraft.world.item.BucketItem) (Object) this;
+        Fluid content = ((BucketItemAccessor) bucket).getContent();
 
         if (content == Fluids.EMPTY) return;
 

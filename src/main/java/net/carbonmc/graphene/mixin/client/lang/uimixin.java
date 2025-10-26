@@ -21,9 +21,9 @@ public abstract class uimixin extends OptionsSubScreen {
         super(p_96284_, p_96285_, p_96286_);
     }
 
-    @Redirect(method = "init",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;addRenderableWidget(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;",ordinal = 1))
-    public <T extends GuiEventListener & Renderable & NarratableEntry> T notReloadResourcePacks(LanguageSelectScreen instance, T guiEventListener){
-        if(guiEventListener instanceof Button button){
+    @Redirect(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;addRenderableWidget(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;", ordinal = 1))
+    public <T extends GuiEventListener & Renderable & NarratableEntry> T notReloadResourcePacks(LanguageSelectScreen instance, T guiEventListener) {
+        if (guiEventListener instanceof Button button) {
             final Button.OnPress fi = button.onPress;
             button.onPress = (p_96099_) -> {
                 flang.langReload = true;

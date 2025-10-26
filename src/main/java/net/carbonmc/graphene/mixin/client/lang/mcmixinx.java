@@ -25,15 +25,19 @@ import java.util.concurrent.CompletableFuture;
 @OnlyIn(Dist.CLIENT)
 @Mixin(Minecraft.class)
 public abstract class mcmixinx {
-    @Shadow @Final private LanguageManager languageManager;
+    @Shadow
+    @Nullable
+    public Screen screen;
+    @Shadow
+    @Final
+    private LanguageManager languageManager;
 
-    @Shadow public abstract ResourceManager getResourceManager();
+    @Shadow
+    public abstract ResourceManager getResourceManager();
 
-    @Shadow @Nullable public Screen screen;
-
-    @Inject(method = "reloadResourcePacks()Ljava/util/concurrent/CompletableFuture;",at = @At("HEAD"),cancellable = true)
-    public void reloadRes(CallbackInfoReturnable<CompletableFuture<Void>> cir){
-        if(flang.langReload){
+    @Inject(method = "reloadResourcePacks()Ljava/util/concurrent/CompletableFuture;", at = @At("HEAD"), cancellable = true)
+    public void reloadRes(CallbackInfoReturnable<CompletableFuture<Void>> cir) {
+        if (flang.langReload) {
             this.languageManager.onResourceManagerReload(this.getResourceManager());
             flang.langReload = false;
             cir.setReturnValue(null);
@@ -41,8 +45,8 @@ public abstract class mcmixinx {
         }
     }
 
-    @Inject(method = "setOverlay",at = @At("HEAD"),cancellable = true)
-    public void reloadRes(Overlay p_91151_, CallbackInfo ci){
-        if(this.screen instanceof LanguageSelectScreen || this.screen instanceof CraftingScreen) ci.cancel();
+    @Inject(method = "setOverlay", at = @At("HEAD"), cancellable = true)
+    public void reloadRes(Overlay p_91151_, CallbackInfo ci) {
+        if (this.screen instanceof LanguageSelectScreen || this.screen instanceof CraftingScreen) ci.cancel();
     }
 }

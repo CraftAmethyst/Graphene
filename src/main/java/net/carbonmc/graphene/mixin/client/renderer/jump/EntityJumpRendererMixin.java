@@ -1,5 +1,3 @@
-// culling.client.mixin.net.carbonmc.graphene.EntityRendererMixin.java
-//1.6.0-更新，修复实体闪烁b🪩ug
 package net.carbonmc.graphene.mixin.client.renderer.jump;
 
 import com.mojang.blaze3d.vertex.PoseStack;

@@ -10,10 +10,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Particle.class)
 public abstract class MixinParticle {
-    @Shadow protected double xd;
-    @Shadow protected double yd;
-    @Shadow protected double zd;
-    @Shadow protected float alpha;
+    @Shadow
+    protected double xd;
+    @Shadow
+    protected double yd;
+    @Shadow
+    protected double zd;
+    @Shadow
+    protected float alpha;
 
     @Redirect(
             method = "tick",

@@ -13,3 +13,4 @@ plugins {
 }
 
 rootProject.name = 'graphene'
+include 'graphene-tritium'
