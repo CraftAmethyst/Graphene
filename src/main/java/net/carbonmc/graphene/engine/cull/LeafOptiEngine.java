@@ -16,10 +16,11 @@ import java.util.concurrent.TimeUnit;
 
 public final class LeafOptiEngine {
     private static final Map<Direction, Direction[]> CONNECTED_DIRECTIONS = new EnumMap<>(Direction.class);
-    private static final Cache<Long, Boolean> CULL_CACHE = Caffeine.newBuilder()
+    public static final Cache<Long, Boolean> CULL_CACHE = Caffeine.newBuilder()
             .maximumSize(10000)
             .expireAfterWrite(1, TimeUnit.SECONDS)
             .build();
+    private static final int minLeafConnections = 2;
 
     static {
         for (Direction face : Direction.values()) {
@@ -46,7 +47,7 @@ public final class LeafOptiEngine {
             return false;
         }
 
-        boolean result = CoolConfig.useAdvancedLeafCulling.get() && !RenderOptimizer.isInFallbackMode()
+        boolean result = CoolConfig.enableleafCulling.get() && !RenderOptimizer.isInFallbackMode()
                 ? RenderOptimizer.shouldCullBlockFace(level, pos, face)
                 : checkSimpleConnection(level, adjacentPos, face);
 
@@ -55,14 +56,13 @@ public final class LeafOptiEngine {
     }
 
     public static boolean checkSimpleConnection(BlockGetter level, BlockPos pos, Direction face) {
-        int required = CoolConfig.minLeafConnections.get();
         int count = 0;
 
         for (Direction dir : CONNECTED_DIRECTIONS.get(face)) {
             if (dir == null) continue;
 
             if (isLeaf(level.getBlockState(pos.relative(dir)))) {
-                if (++count >= required) return true;
+                if (++count >= minLeafConnections) return true;
             }
         }
         return false;
@@ -73,7 +73,6 @@ public final class LeafOptiEngine {
     }
 
     public static boolean checkConnectedLeaves(BlockGetter level, BlockPos pos, @Nullable Direction face) {
-        int required = CoolConfig.minLeafConnections.get();
         int count = 0;
 
         Direction[] checkDirs = (face != null) ? CONNECTED_DIRECTIONS.get(face) : Direction.values();
@@ -82,7 +81,7 @@ public final class LeafOptiEngine {
             if (dir == null) continue;
 
             if (isLeaf(level.getBlockState(pos.relative(dir)))) {
-                if (++count >= required) return true;
+                if (++count >= minLeafConnections) return true;
             }
         }
         return false;
