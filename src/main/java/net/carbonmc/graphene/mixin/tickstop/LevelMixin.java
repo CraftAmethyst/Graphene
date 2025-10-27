@@ -1,8 +1,6 @@
 package net.carbonmc.graphene.mixin.tickstop;
 
 import net.carbonmc.graphene.TickHelper.EntityTickHelper;
-import net.carbonmc.graphene.client.GrapheneClient;
-import net.carbonmc.graphene.config.CoolConfig;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,10 +20,6 @@ public abstract class LevelMixin {
     )
     private void onEntityTick(Consumer<Entity> consumer, Entity entity, CallbackInfo ci) {
         if (EntityTickHelper.shouldSkipTick(entity)) {
-            ci.cancel();
-        }
-        if (!CoolConfig.isTickStoppingEnabled()) return;
-        if (GrapheneClient.instance != null && GrapheneClient.instance.shouldSkipEntity(entity)) {
             ci.cancel();
         }
     }
