@@ -81,10 +81,6 @@
       "tick": "Lnet/minecraft/world/entity/projectile/ThrownEnderpearl;m_8119_()V",
       "onHit": "Lnet/minecraft/world/entity/projectile/ThrownEnderpearl;m_6532_(Lnet/minecraft/world/phys/HitResult;)V"
     },
-    "net/carbonmc/graphene/mixin/client/renderer/vertex/VertexBufferMixin": {
-      "uploadVertexBuffer": "Lcom/mojang/blaze3d/vertex/VertexBuffer;m_231218_(Lcom/mojang/blaze3d/vertex/BufferBuilder$DrawState;Ljava/nio/ByteBuffer;)Lcom/mojang/blaze3d/vertex/VertexFormat;",
-      "uploadIndexBuffer": "Lcom/mojang/blaze3d/vertex/VertexBuffer;m_231223_(Lcom/mojang/blaze3d/vertex/BufferBuilder$DrawState;Ljava/nio/ByteBuffer;)Lcom/mojang/blaze3d/systems/RenderSystem$AutoStorageIndexBuffer;"
-    },
     "net/carbonmc/graphene/mixin/client/renderer/jump/EntityJumpRendererMixin": {
       "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V": "Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;m_114384_(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"
     },
@@ -132,6 +128,9 @@
     "net/carbonmc/graphene/mixin/MemoryLeakFix/client/ScreenshotByteBufferLeakFixMixin": {
       "Lcom/mojang/blaze3d/platform/GlUtil;allocateMemory(I)Ljava/nio/ByteBuffer;": "Lcom/mojang/blaze3d/platform/GlUtil;m_166247_(I)Ljava/nio/ByteBuffer;",
       "grabHugeScreenshot": "Lnet/minecraft/client/Minecraft;m_167903_(Ljava/io/File;IIII)Lnet/minecraft/network/chat/Component;"
+    },
+    "net/carbonmc/graphene/mixin/client/renderer/culling/LevelTKMixin": {
+      "guardEntityTick": "Lnet/minecraft/world/level/Level;m_46653_(Ljava/util/function/Consumer;Lnet/minecraft/world/entity/Entity;)V"
     },
     "net/carbonmc/graphene/mixin/client/lang/uimixin": {
       "init": "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;m_7856_()V",
@@ -272,6 +271,9 @@
       "net/carbonmc/graphene/mixin/MemoryLeakFix/client/ScreenshotByteBufferLeakFixMixin": {
         "Lcom/mojang/blaze3d/platform/GlUtil;allocateMemory(I)Ljava/nio/ByteBuffer;": "Lcom/mojang/blaze3d/platform/GlUtil;m_166247_(I)Ljava/nio/ByteBuffer;",
         "grabHugeScreenshot": "Lnet/minecraft/client/Minecraft;m_167903_(Ljava/io/File;IIII)Lnet/minecraft/network/chat/Component;"
+      },
+      "net/carbonmc/graphene/mixin/client/renderer/culling/LevelTKMixin": {
+        "guardEntityTick": "Lnet/minecraft/world/level/Level;m_46653_(Ljava/util/function/Consumer;Lnet/minecraft/world/entity/Entity;)V"
       },
       "net/carbonmc/graphene/mixin/client/lang/uimixin": {
         "init": "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;m_7856_()V",
