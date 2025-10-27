@@ -41,6 +41,7 @@
     "client.renderer.culling.EntityRendererMixin",
     "client.renderer.culling.LeafRenderMixin",
     "client.renderer.culling.LevelRendererMixin",
+    "client.renderer.culling.LevelTKMixin",
     "client.renderer.fix.EntityNameRendererMixin",
     "client.renderer.jump.EntityJumpRendererMixin",
     "client.renderer.other.FontRendererMixin",
