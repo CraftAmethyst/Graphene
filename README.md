@@ -93,4 +93,9 @@ Graphene is built for the average player, not for one specific setup. Every opti
 
 Enjoy the extra frames!
 
+## Contributors
+<a href="https://2git.xyz/CraftAmethyst/Graphene/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=CraftAmethyst/Graphene" />
+</a>
+
 > **Note:** Not an official Minecraft product.
