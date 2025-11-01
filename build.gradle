@@ -1,180 +1,150 @@
-buildscript {
-    repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
-    id 'eclipse'
-    id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java-library'
+    id 'maven-publish'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.107'
 }
 
-apply plugin: 'org.spongepowered.mixin'
-
-group = mod_group_id
 version = mod_version
-jarJar.enable()
-base {
-    archivesName = mod_id
-}
-
+group   = mod_group_id
+base.archivesName = mod_id
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    toolchain.languageVersion = JavaLanguageVersion.of(22)
     modularity.inferModulePath = true
 }
+
 repositories {
-    maven {
-        name = "CurseMaven"
-        url = "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-    maven {
-        url = "https://api.modrinth.com/maven"
-        content { includeGroup "maven.modrinth" }
-    }
-    maven { url = 'https://maven.minecraftforge.net/' }
-    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-    maven { url 'https://maven.aliyun.com/repository/public' }
-    maven { url = 'https://jitpack.io' }
-    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
-    maven { url = 'https://libraries.minecraft.net/' }
+    mavenLocal()
+    maven { url = uri("build/local-repo") }
     mavenCentral()
+    // LWJGL official repository for natives/classifiers
+    maven { url = 'https://repo.lwjgl.org/release' }
+    maven { url = 'https://maven.neoforged.net/releases' }
+
+    maven {
+        name = 'CurseMaven'
+        url  = 'https://cursemaven.com'
+        content { includeGroup 'curse.maven' }
+    }
+
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+
+    maven { url = 'https://jitpack.io' }
+    maven {
+        name = 'CodeMC-OcclusionCulling'
+        url = 'https://ci.codemc.io/job/LogisticsCraft/job/OcclusionCulling/lastSuccessfulBuild/artifact/'
+    }
+    maven { url 'https://repo.codemc.io/repository/maven-public/' }
 }
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-    copyIdeResources = true
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
     runs {
-        configureEach {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
         client {
-            property 'forge.enabledGameTestNamespaces', mod_id
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
-
         server {
-            property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
         gameTestServer {
-            property 'forge.enabledGameTestNamespaces', mod_id
+            type = 'gameTestServer'
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
-
         data {
-            workingDirectory project.file('run-data')
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            data()
+            programArguments.addAll '--mod', mod_id, '--all', '--output',
+                    file('src/generated/resources').absolutePath,
+                    '--existing', file('src/main/resources').absolutePath
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'forge.logging.console.level', 'debug'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
         }
     }
 }
-
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
-    config 'graphene.compat.mixins.json'
-   // config 'graphene.zc.mixins.json'
-    debug.verbose = true
-    debug.export = true
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.4.0'
-    implementation 'com.esotericsoftware:kryo:5.6.2'
-    implementation 'org.apache.commons:commons-math3:3.6.1'
-    implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'com.github.luben:zstd-jni:1.5.5-5'
     implementation 'org.joml:joml:1.10.5'
-    implementation 'org.spongepowered:mixin:0.8.5'
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation "com.github.ben-manes.caffeine:caffeine:3.2.0"
-    jarJar("com.github.ben-manes.caffeine:caffeine:3.2.0") {
-        jarJar.ranged(it, "[3.2.0,3.3.0)")
-    }
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.2.0"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.2.0")) {
-        jarJar.ranged(it, "[0.2.0,)")
-    }
-    compileOnly fg.deobf("maven.modrinth:distanthorizons:2.3.4-b-1.20.1")
-    implementation files('lib/1.jar')
-    implementation 'net.jpountz.lz4:lz4:1.3.0'
-    implementation files('lib/cloth.jar')
-    implementation 'org.ow2.asm:asm-tree:9.4'
-    compileOnly 'org.projectlombok:lombok:1.18.28'
-    annotationProcessor 'org.projectlombok:lombok:1.18.28'
-    implementation 'com.esotericsoftware:kryo:5.4.0'
-    jarJar("com.esotericsoftware:kryo:5.4.0") {
-        jarJar.ranged(it, "[5.4.0,6.0.0)")
-    }
-}
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    implementation 'com.esotericsoftware:kryo:5.6.2'
 
-tasks.named('processResources', ProcessResources).configure {
-    var replaceProperties = [minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
-                             forge_version       : forge_version, forge_version_range: forge_version_range,
-                             loader_version_range: loader_version_range,
-                             mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-                             mod_authors         : mod_authors, mod_description: mod_description,]
+    // LWJGL OpenCL for server-side GPU compute (OpenCL)
+    implementation platform('org.lwjgl:lwjgl-bom:3.3.3')
+    implementation 'org.lwjgl:lwjgl'
+    implementation 'org.lwjgl:lwjgl-opencl'
+    // Platform natives (build host only)
+    runtimeOnly 'org.lwjgl:lwjgl::natives-windows'
 
-    inputs.properties replaceProperties
+    compileOnly files('lib/cloth.jar')
+    compileOnly files('lib/config.jar')
+    implementation "com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT"
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    compileOnly "maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp"
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
 
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
-    }
-}
-
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes(["Specification-Title"     : mod_id,
-                    "Specification-Vendor"    : mod_authors,
-                    "Specification-Version"   : "1", // We are version 1 of ourselves
-                    "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : project.jar.archiveVersion,
-                    "Implementation-Vendor"   : mod_authors,
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")])
-    }
-    from {
-        configurations.runtimeClasspath.collect {
-            it.isDirectory() ? it : zipTree(it)
+    jarJar('com.github.ben-manes.caffeine:caffeine:3.2.0') {
+        version {
+            strictly '[3.2,3.3)'
         }
     }
 
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
-    duplicatesStrategy = 'exclude'
-    finalizedBy 'reobfJar'
+
+    jarJar('com.esotericsoftware:kryo:5.6.2') {
+        version {
+            strictly '[5.6,5.7)'
+        }
+    }
+
+    // Embed occlusionculling into final jar (no relocation)
+    jarJar("com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT") {
+    }
+
+    // Embed LWJGL OpenCL bindings to satisfy org.lwjgl.opencl.CL at runtime
+    jarJar("org.lwjgl:lwjgl-opencl:3.3.3") {
+    }
+
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.release = 17 // 确保编译为 Java 17 字节码
-    options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+    options.release = 22
     options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
 }
 
-shadowJar {
-    mergeServiceFiles()
-    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
-
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven { url = uri("file://${project.projectDir}/repo") }
+    }
 }
-jar {
-    manifest.attributes([
-            "MixinConfigs": "graphene.mixins.json,graphene.mixins.json,graphene.compat.mixins.json"
-    ])
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }

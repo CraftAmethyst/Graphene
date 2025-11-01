@@ -16,9 +16,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(LevelRenderer.class)
 public class MixinWorldRenderer {
+    private static final int CHECK_INTERVAL = 5;
     private final BlockPos.MutableBlockPos lastPos = new BlockPos.MutableBlockPos();
     private final AtomicBoolean wasUnderwater = new AtomicBoolean(false);
-    private static final int CHECK_INTERVAL = 5;
     private int tickCounter = 0;
 
     @Inject(
@@ -27,13 +27,7 @@ public class MixinWorldRenderer {
             cancellable = true
     )
     private void graphene$cancelSkyWhenUnderwater(
-            PoseStack poseStack,
-            Matrix4f projectionMatrix,
-            float partialTick,
-            Camera camera,
-            boolean bl,
-            Runnable runnable,
-            CallbackInfo ci
+            Matrix4f frustumMatrix, Matrix4f projectionMatrix, float partialTick, Camera camera, boolean isFoggy, Runnable skyFogSetup, CallbackInfo ci
     ) {
         if (++tickCounter % CHECK_INTERVAL == 0 || !lastPos.equals(camera.getBlockPosition())) {
             BlockPos current = camera.getBlockPosition();

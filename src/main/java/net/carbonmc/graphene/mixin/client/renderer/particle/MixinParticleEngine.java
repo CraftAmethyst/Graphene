@@ -1,13 +1,12 @@
 package net.carbonmc.graphene.mixin.client.renderer.particle;
 
 import net.carbonmc.graphene.config.CoolConfig;
-import net.carbonmc.graphene.util.VersionChecker;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Random;
+
 @OnlyIn(Dist.CLIENT)
 @Mixin(ParticleEngine.class)
 public abstract class MixinParticleEngine {
@@ -24,11 +24,6 @@ public abstract class MixinParticleEngine {
 
     @Inject(method = "tickParticle", at = @At("HEAD"), cancellable = true)
     private void onTickParticle(Particle particle, CallbackInfo ci) {
-        //由于1.19.4版本中此功能会导致mc崩溃，这里做了检测，1.19.4/forge版本为45就不启用功能
-        if (VersionChecker.shouldDisableOptimizations() ||
-                !CoolConfig.ENABLE_PARTICLE_OPTIMIZATION.get()) {
-            return;
-        }
         if (!CoolConfig.ENABLE_PARTICLE_OPTIMIZATION.get() ||
                 !CoolConfig.ENABLE_PARTICLE_LOD.get()) {
             return;
@@ -47,13 +42,12 @@ public abstract class MixinParticleEngine {
 
         if (distanceSq > threshold * threshold) {
             if (RANDOM.nextDouble() > CoolConfig.LOD_REDUCTION_FACTOR.get()) {
-                // 通过Accessor修改alpha值
-                ((ParticleAccessor)particle).setAlphaAccessor(0.0F);
+                ((ParticleAccessor) particle).setAlphaAccessor(0.0F);
             } else {
-                ((ParticleAccessor)particle).setAlphaAccessor(1.0F);
+                ((ParticleAccessor) particle).setAlphaAccessor(1.0F);
             }
         } else {
-            ((ParticleAccessor)particle).setAlphaAccessor(1.0F);
+            ((ParticleAccessor) particle).setAlphaAccessor(1.0F);
         }
     }
 

@@ -1,0 +1,43 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+
+modId = "graphene"
+version = "2.1.1"
+displayName = "Graphene"
+authors = "CarbonMC, ZCRAFT"
+description = '''Thanks for you use this mod!'''
+
+[[mixins]]
+config = "graphene.mixins.json"
+[[mixins]]
+config = "graphene.mixins.ae2wtlib.json"
+
+[[dependencies.graphene]]
+modId = "cloth_config"
+type = "required"
+versionRange = "0.0.1"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.graphene]]
+modId = "forgeconfigapiport"
+type = "required"
+versionRange = "0.0.1"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.graphene]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.graphene]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.20.1,1.22)"
+ordering = "NONE"
+side = "BOTH"

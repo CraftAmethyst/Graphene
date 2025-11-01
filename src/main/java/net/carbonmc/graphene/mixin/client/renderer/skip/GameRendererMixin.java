@@ -3,8 +3,8 @@ package net.carbonmc.graphene.mixin.client.renderer.skip;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.carbonmc.graphene.config.CoolConfig;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL30;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +25,7 @@ public abstract class GameRendererMixin {
             return;
         }
 
-        RenderTarget target = (RenderTarget)(Object)this;
+        RenderTarget target = (RenderTarget) (Object) this;
         int srcFbo = target.frameBufferId;
 
         GlStateManager._glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, srcFbo);

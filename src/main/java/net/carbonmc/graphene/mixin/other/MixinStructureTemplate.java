@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(StructureTemplate.class)
 public abstract class MixinStructureTemplate {
 
-    // 方案1：修改保存时的NBT变量
+
     @ModifyVariable(
             method = "save",
             at = @At("HEAD"),
@@ -24,7 +24,6 @@ public abstract class MixinStructureTemplate {
         return KryoNBTUtil.optimizeWrite(original);
     }
 
-    // 方案3：备用加载入口
     @Inject(
             method = "load(Lnet/minecraft/core/HolderGetter;Lnet/minecraft/nbt/CompoundTag;)V",
             at = @At("HEAD")

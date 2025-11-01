@@ -14,8 +14,7 @@ public abstract class EntityNameRendererMixin<T extends Entity> {
     @Inject(
             method = "shouldShowName",
             at = @At("HEAD"),
-            cancellable = true,
-            remap = true
+            cancellable = true
     )
     private void onShouldShowName(T entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof Player) {

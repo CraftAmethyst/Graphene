@@ -1,6 +1,7 @@
 package net.carbonmc.graphene.mixin.other;
 
 import net.carbonmc.graphene.util.KryoNBTUtil;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,10 +15,11 @@ import java.util.Set;
 
 @Mixin(JigsawBlockEntity.class)
 public abstract class MixinJigsawBlockEntity {
-    @Unique private CompoundTag kryo$cachedTag;
+    @Unique
+    private CompoundTag kryo$cachedTag;
 
     @Inject(method = "saveAdditional", at = @At("HEAD"), cancellable = true)
-    private void onSave(CompoundTag tag, CallbackInfo ci) {
+    private void onSave(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
         kryo$cachedTag = KryoNBTUtil.optimizeWrite(tag);
         if (kryo$cachedTag != tag) {
             Set<String> keys = kryo$cachedTag.getAllKeys();
@@ -30,7 +32,7 @@ public abstract class MixinJigsawBlockEntity {
         }
     }
 
-    @ModifyVariable(method = "load", at = @At("HEAD"), argsOnly = true)
+    @ModifyVariable(method = "loadAdditional", at = @At("HEAD"), argsOnly = true)
     private CompoundTag onLoad(CompoundTag tag) {
         return KryoNBTUtil.optimizeRead(tag);
     }

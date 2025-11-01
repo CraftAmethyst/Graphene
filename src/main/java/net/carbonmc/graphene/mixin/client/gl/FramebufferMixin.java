@@ -1,0 +1,51 @@
+package net.carbonmc.graphene.mixin.client.gl;
+
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.TextureUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.carbonmc.graphene.gl.CleanupAction;
+import net.carbonmc.graphene.gl.FramebufferFixer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+
+import java.lang.ref.Cleaner;
+
+@Mixin(RenderTarget.class)
+@OnlyIn(Dist.CLIENT)
+public abstract class FramebufferMixin implements FramebufferFixer {
+    private static final Cleaner CLEANER = Cleaner.create();
+    private final Cleaner.Cleanable cleanable;
+    @Shadow
+    public int frameBufferId;
+    @Shadow
+    protected int colorTextureId;
+    @Shadow
+    protected int depthBufferId;
+
+    public FramebufferMixin() {
+        this.cleanable = CLEANER.register(this, new CleanupAction(() ->
+                RenderSystem.recordRenderCall(this::graphene$cleanup)
+        ));
+    }
+
+    @Override
+    public void graphene$cleanup() {
+        RenderSystem.assertOnRenderThreadOrInit();
+
+        if (this.colorTextureId > -1) {
+            TextureUtil.releaseTextureId(this.colorTextureId);
+            this.colorTextureId = -1;
+        }
+        if (this.depthBufferId > -1) {
+            TextureUtil.releaseTextureId(this.depthBufferId);
+            this.depthBufferId = -1;
+        }
+        if (this.frameBufferId > -1) {
+            GlStateManager._glDeleteFramebuffers(this.frameBufferId);
+            this.frameBufferId = -1;
+        }
+    }
+}

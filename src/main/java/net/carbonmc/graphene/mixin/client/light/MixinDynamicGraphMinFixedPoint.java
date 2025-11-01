@@ -18,10 +18,6 @@ import java.util.function.LongPredicate;
 @Mixin(DynamicGraphMinFixedPoint.class)
 public abstract class MixinDynamicGraphMinFixedPoint {
 
-    @Shadow
-    @Final
-    private int levelCount;
-
     @Mutable
     @Shadow
     @Final
@@ -46,7 +42,7 @@ public abstract class MixinDynamicGraphMinFixedPoint {
             return;
         }
         ci.cancel();
-        LongSet keys = ((Long2ByteOpenHashMap) computedLevels).keySet();
+        LongSet keys = computedLevels.keySet();
         LongIterator it = keys.iterator();
         while (it.hasNext()) {
             long pos = it.nextLong();

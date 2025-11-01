@@ -16,9 +16,22 @@ import java.util.Deque;
 @Mixin(PoseStack.class)
 public class MixinPoseStack {
 
-    @Shadow @Final
-    private Deque<PoseStack.Pose> poseStack;
     private final Deque<PoseStack.Pose> pool = new ArrayDeque<>();
+    @Shadow
+    @Final
+    private Deque<PoseStack.Pose> poseStack;
+
+    private static PoseStack.Pose createPose(Matrix4f pose, Matrix3f normal) {
+        try {
+            java.lang.reflect.Constructor<PoseStack.Pose> ctr =
+                    PoseStack.Pose.class.getDeclaredConstructor(Matrix4f.class, Matrix3f.class);
+            ctr.setAccessible(true);
+            return ctr.newInstance(pose, normal);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create PoseStack.Pose", e);
+        }
+    }
+
     @Inject(method = "pushPose", at = @At("HEAD"), cancellable = true)
     private void onPush(CallbackInfo ci) {
         PoseStack.Pose top = this.poseStack.getLast();
@@ -36,19 +49,10 @@ public class MixinPoseStack {
         this.poseStack.addLast(reused);
         ci.cancel();
     }
+
     @Inject(method = "popPose", at = @At("HEAD"), cancellable = true)
     private void onPop(CallbackInfo ci) {
         this.pool.addLast(this.poseStack.removeLast());
         ci.cancel();
-    }
-    private static PoseStack.Pose createPose(Matrix4f pose, Matrix3f normal) {
-        try {
-            java.lang.reflect.Constructor<PoseStack.Pose> ctr =
-                    PoseStack.Pose.class.getDeclaredConstructor(Matrix4f.class, Matrix3f.class);
-            ctr.setAccessible(true);
-            return ctr.newInstance(pose, normal);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create PoseStack.Pose", e);
-        }
     }
 }
