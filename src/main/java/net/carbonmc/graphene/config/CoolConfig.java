@@ -42,9 +42,6 @@ public class CoolConfig {
     public static final ForgeConfigSpec.BooleanValue OPTIMIZE_TRAPPED_CHESTS;
     public static final ForgeConfigSpec.IntValue MAX_RENDER_DISTANCE;
     public static final ForgeConfigSpec.BooleanValue OPTIMIZE_ENTITY_CLEANUP;
-    // GPU Collision
-    public static ForgeConfigSpec.BooleanValue enableGpuCollision;
-    public static ForgeConfigSpec.IntValue gpuCollisionMaxPairs;
     public static ForgeConfigSpec.BooleanValue enableleafCulling;
     public static ForgeConfigSpec.BooleanValue enableCulling;
     public static ForgeConfigSpec.BooleanValue enableEntityCulling;
@@ -233,15 +230,6 @@ public class CoolConfig {
                 .defineInRange("inactiveRenderDistance", 2, 2, 12);
         BUILDER.pop();
 
-        // GPU Collision section
-        BUILDER.push("GPU 碰撞 | GPU Collision");
-        enableGpuCollision = BUILDER
-                .comment("在服务端使用 OpenCL 将实体 AABB broad-phase 碰撞计算下放到 GPU (需要安装厂商 OpenCL 驱动)")
-                .define("enableGpuCollision", false);
-        gpuCollisionMaxPairs = BUILDER
-                .comment("GPU broad-phase 输出候选对上限，超过将回退/分块重算")
-                .defineInRange("gpuCollisionMaxPairs", 65536, 1024, 10_000_000);
-        BUILDER.pop();
 
         BUILDER.comment("实体优化 | Entity Optimization").push("entity_optimization");
         BUILDER.push("实体Tick优化 | Entity Tick Optimization");
@@ -361,28 +349,42 @@ public class CoolConfig {
         SPEC = BUILDER.build();
     }
 
+    // Safe accessors to avoid dev-time crash before config is loaded
+    public static boolean safeGet(ForgeConfigSpec.BooleanValue value, boolean def) {
+        try { return value.get(); } catch (IllegalStateException e) { return def; }
+    }
+    public static int safeGet(ForgeConfigSpec.IntValue value, int def) {
+        try { return value.get(); } catch (IllegalStateException e) { return def; }
+    }
+    public static long safeGet(ForgeConfigSpec.LongValue value, long def) {
+        try { return value.get(); } catch (IllegalStateException e) { return def; }
+    }
+    public static double safeGet(ForgeConfigSpec.DoubleValue value, double def) {
+        try { return value.get(); } catch (IllegalStateException e) { return def; }
+    }
+
     public static boolean isCullingEnabled() {
-        return enableCulling.get();
+        return safeGet(enableCulling, true);
     }
 
     public static boolean isEntityCullingEnabled() {
-        return isCullingEnabled() && enableEntityCulling.get();
+        return isCullingEnabled() && safeGet(enableEntityCulling, true);
     }
 
     public static boolean isBlockEntityCullingEnabled() {
-        return isCullingEnabled() && enableBlockEntityCulling.get();
+        return isCullingEnabled() && safeGet(enableBlockEntityCulling, true);
     }
 
     public static boolean isTickStoppingEnabled() {
-        return isCullingEnabled() && enableTickStopping.get();
+        return isCullingEnabled() && safeGet(enableTickStopping, false);
     }
 
     public static boolean isNameTagCullingEnabled() {
-        return isCullingEnabled() && enableNameTagCulling.get();
+        return isCullingEnabled() && safeGet(enableNameTagCulling, true);
     }
 
     public static List<? extends String> getEntityBlacklist() {
-        return entityBlacklist.get();
+        try { return entityBlacklist.get(); } catch (IllegalStateException e) { return List.of(); }
     }
 
     public enum RenderMode {
