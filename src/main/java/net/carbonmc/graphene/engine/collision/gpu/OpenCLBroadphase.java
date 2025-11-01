@@ -5,8 +5,6 @@ import net.minecraft.world.phys.AABB;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opencl.*;
 import org.lwjgl.system.MemoryStack;
-import org.lwjgl.PointerBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +16,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.lwjgl.opencl.CL10.*;
 import static org.lwjgl.system.MemoryStack.*;
@@ -25,15 +24,14 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 /**
  * Server-side OpenCL broad-phase for entity AABB collision pairs.
- *
+ * <p>
  * This module discovers an OpenCL device (prefer GPU), compiles the kernel under resources/kernels/aabb_broadphase.cl,
  * uploads AABBs and emits candidate pairs (idA,idB).
  */
 public final class OpenCLBroadphase {
     private static final String KERNEL_PATH = "/kernels/aabb_broadphase.cl";
-
-    private boolean initialized;
     private static final AtomicBoolean CL_CREATED = new AtomicBoolean(false);
+    private boolean initialized;
     private long platform;
     private long device;
     private long context;
@@ -52,9 +50,33 @@ public final class OpenCLBroadphase {
     private int capacityAABBs = 0;
     private int capacityPairs = 0;
 
-    public static final class Pair {
-        public final int a, b;
-        public Pair(int a, int b) { this.a = a; this.b = b; }
+    private static void check(int err, String where) {
+        if (err != CL_SUCCESS) throw new IllegalStateException(where + " failed: error=" + err);
+    }
+
+    private static String loadKernel() {
+        try (InputStream in = OpenCLBroadphase.class.getResourceAsStream(KERNEL_PATH)) {
+            if (in == null) throw new IOException("Kernel not found: " + KERNEL_PATH);
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) sb.append(line).append('\n');
+                return sb.toString();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static ByteBuffer getProgramBuildLog(long program, long device) {
+        try (MemoryStack stack = stackPush()) {
+            PointerBuffer size = stack.mallocPointer(1);
+            clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, (ByteBuffer) null, size);
+            int sz = (int) size.get(0);
+            ByteBuffer buffer = memAlloc(sz);
+            clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, buffer, null);
+            return buffer;
+        }
     }
 
     public synchronized void initIfNeeded() {
@@ -82,13 +104,21 @@ public final class OpenCLBroadphase {
             for (int idx = 0; idx < pcount; idx++) {
                 long p = plats.get(idx);
                 long d = pickDevice(stack, p, CL_DEVICE_TYPE_GPU);
-                if (d != NULL) { chosenPlatform = p; chosenDevice = d; break; }
+                if (d != NULL) {
+                    chosenPlatform = p;
+                    chosenDevice = d;
+                    break;
+                }
             }
             if (chosenDevice == NULL) {
                 for (int idx = 0; idx < pcount; idx++) {
                     long p = plats.get(idx);
                     long d = pickDevice(stack, p, CL_DEVICE_TYPE_CPU);
-                    if (d != NULL) { chosenPlatform = p; chosenDevice = d; break; }
+                    if (d != NULL) {
+                        chosenPlatform = p;
+                        chosenDevice = d;
+                        break;
+                    }
                 }
             }
             if (chosenDevice == NULL) {
@@ -136,24 +166,6 @@ public final class OpenCLBroadphase {
         PointerBuffer devs = stack.mallocPointer(di.get(0));
         check(clGetDeviceIDs(plat, type, devs, (IntBuffer) null), "clGetDeviceIDs(list)");
         return devs.get(0);
-    }
-
-    private static void check(int err, String where) {
-        if (err != CL_SUCCESS) throw new IllegalStateException(where + " failed: error=" + err);
-    }
-
-    private static String loadKernel() {
-        try (InputStream in = OpenCLBroadphase.class.getResourceAsStream(KERNEL_PATH)) {
-            if (in == null) throw new IOException("Kernel not found: " + KERNEL_PATH);
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) sb.append(line).append('\n');
-                return sb.toString();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void ensureCapacity(int n, int maxPairs) {
@@ -204,7 +216,9 @@ public final class OpenCLBroadphase {
                 hMax.put((float) b.maxX).put((float) b.maxY).put((float) b.maxZ).put(0f);
                 hIds.put(ids[i]);
             }
-            hMin.flip(); hMax.flip(); hIds.flip();
+            hMin.flip();
+            hMax.flip();
+            hIds.flip();
 
             // Zero counters
             IntBuffer zero = stack.ints(0);
@@ -279,14 +293,12 @@ public final class OpenCLBroadphase {
         initialized = false;
     }
 
-    private static ByteBuffer getProgramBuildLog(long program, long device) {
-        try (MemoryStack stack = stackPush()) {
-            PointerBuffer size = stack.mallocPointer(1);
-            clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, (ByteBuffer) null, size);
-            int sz = (int) size.get(0);
-            ByteBuffer buffer = memAlloc(sz);
-            clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, buffer, null);
-            return buffer;
+    public static final class Pair {
+        public final int a, b;
+
+        public Pair(int a, int b) {
+            this.a = a;
+            this.b = b;
         }
     }
 }

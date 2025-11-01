@@ -15,11 +15,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public final class LeafOptiEngine {
-    private static final Map<Direction, Direction[]> CONNECTED_DIRECTIONS = new EnumMap<>(Direction.class);
     public static final Cache<Long, Boolean> CULL_CACHE = Caffeine.newBuilder()
             .maximumSize(10000)
             .expireAfterWrite(1, TimeUnit.SECONDS)
             .build();
+    private static final Map<Direction, Direction[]> CONNECTED_DIRECTIONS = new EnumMap<>(Direction.class);
     private static final int minLeafConnections = 2;
 
     static {

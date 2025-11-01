@@ -1,10 +1,10 @@
 package net.carbonmc.graphene.client;
 
-import net.carbonmc.graphene.helper.TickHelper.EntityTickHelper;
 import net.carbonmc.graphene.client.gui.ClothConfigScreenFactory;
 import net.carbonmc.graphene.config.CoolConfig;
 import net.carbonmc.graphene.engine.cull.AABBCullingManager;
 import net.carbonmc.graphene.engine.cull.CullCache;
+import net.carbonmc.graphene.helper.TickHelper.EntityTickHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;

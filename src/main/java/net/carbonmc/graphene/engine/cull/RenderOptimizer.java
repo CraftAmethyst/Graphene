@@ -13,14 +13,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class RenderOptimizer {
     private static final AtomicBoolean FALLBACK_MODE = new AtomicBoolean(false);
-    private static ExecutorService tracerPool;
     private static final int traceDistance = 16;
-    private static ScheduledExecutorService timeoutChecker;
-
     private static final Cache<Long, Boolean> BLOCK_CACHE = Caffeine.newBuilder()
             .maximumSize(10000)
             .expireAfterWrite(1, TimeUnit.SECONDS)
             .build();
+    private static ExecutorService tracerPool;
+    private static ScheduledExecutorService timeoutChecker;
 
     public static boolean shouldCullBlockFace(BlockGetter level, BlockPos pos, Direction face) {
         if (FALLBACK_MODE.get()) {

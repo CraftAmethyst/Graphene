@@ -1,9 +1,9 @@
 package net.carbonmc.graphene.mixin.client.renderer.culling;
 
-import net.carbonmc.graphene.helper.TickHelper.EntityTickHelper;
 import net.carbonmc.graphene.client.GrapheneClient;
 import net.carbonmc.graphene.config.CoolConfig;
 import net.carbonmc.graphene.engine.cull.CullCache;
+import net.carbonmc.graphene.helper.TickHelper.EntityTickHelper;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;

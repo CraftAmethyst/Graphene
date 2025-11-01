@@ -6,7 +6,7 @@ plugins {
 }
 
 version = mod_version
-group   = mod_group_id
+group = mod_group_id
 base.archivesName = mod_id
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(22)
@@ -23,7 +23,7 @@ repositories {
 
     maven {
         name = 'CurseMaven'
-        url  = 'https://cursemaven.com'
+        url = 'https://cursemaven.com'
         content { includeGroup 'curse.maven' }
     }
 

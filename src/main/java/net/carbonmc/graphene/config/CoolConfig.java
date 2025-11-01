@@ -10,9 +10,6 @@ public class CoolConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_PARTICLE_OPTIMIZATION;
-    // GPU Collision
-    public static ForgeConfigSpec.BooleanValue enableGpuCollision;
-    public static ForgeConfigSpec.IntValue gpuCollisionMaxPairs;
     public static final ForgeConfigSpec.BooleanValue ENABLE_PARTICLE_LOD;
     public static final ForgeConfigSpec.DoubleValue LOD_DISTANCE_THRESHOLD;
     public static final ForgeConfigSpec.DoubleValue LOD_REDUCTION_FACTOR;
@@ -34,8 +31,6 @@ public class CoolConfig {
     public static final ForgeConfigSpec.BooleanValue MemoryLeakFix_AE2WTLibCreativeTabLeakFix;
     public static final ForgeConfigSpec.BooleanValue MemoryLeakFix_ScreenshotByteBufferLeakFix;
     public static final ForgeConfigSpec.BooleanValue DEBUG_LOGGING;
-    public static ForgeConfigSpec.BooleanValue enableleafCulling;
-    public static ForgeConfigSpec.BooleanValue enableCulling;
     public static final ForgeConfigSpec.BooleanValue BambooLight;
     public static final ForgeConfigSpec.BooleanValue REDUCE_FPS_WHEN_INACTIVE;
     public static final ForgeConfigSpec.IntValue INACTIVE_FPS_LIMIT;
@@ -47,6 +42,11 @@ public class CoolConfig {
     public static final ForgeConfigSpec.BooleanValue OPTIMIZE_TRAPPED_CHESTS;
     public static final ForgeConfigSpec.IntValue MAX_RENDER_DISTANCE;
     public static final ForgeConfigSpec.BooleanValue OPTIMIZE_ENTITY_CLEANUP;
+    // GPU Collision
+    public static ForgeConfigSpec.BooleanValue enableGpuCollision;
+    public static ForgeConfigSpec.IntValue gpuCollisionMaxPairs;
+    public static ForgeConfigSpec.BooleanValue enableleafCulling;
+    public static ForgeConfigSpec.BooleanValue enableCulling;
     public static ForgeConfigSpec.BooleanValue enableEntityCulling;
     public static ForgeConfigSpec.BooleanValue enableBlockEntityCulling;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> entityBlacklist;
@@ -384,6 +384,7 @@ public class CoolConfig {
     public static List<? extends String> getEntityBlacklist() {
         return entityBlacklist.get();
     }
+
     public enum RenderMode {
         SIMPLE, VANILLA
     }

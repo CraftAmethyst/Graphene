@@ -214,9 +214,11 @@ public class AABBCullingManager {
         lastResetCameraPos = Vec3.ZERO;
         lastResetTime = 0;
     }
+
     private boolean isPlayerSprinting() {
         return mc.player != null && mc.player.isSprinting();
     }
+
     public double getCurrentCullingDistance() {
         return cachedCullingDistance;
     }
