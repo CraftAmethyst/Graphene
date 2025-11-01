@@ -20,6 +20,8 @@ repositories {
     // LWJGL official repository for natives/classifiers
     maven { url = 'https://repo.lwjgl.org/release' }
     maven { url = 'https://maven.neoforged.net/releases' }
+    maven { url = "https://maven.shedaniel.me/" }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"}
 
     maven {
         name = 'CurseMaven'
@@ -95,8 +97,8 @@ dependencies {
     // Platform natives (build host only)
     runtimeOnly 'org.lwjgl:lwjgl::natives-windows'
 
-    compileOnly files('lib/cloth.jar')
-    compileOnly files('lib/config.jar')
+    compileOnly 'me.shedaniel.cloth:cloth-config-neoforge:15.0.140'
+    compileOnly 'fuzs.forgeconfigapiport:forgeconfigapiport-neoforge:21.1.4'
     implementation "com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT"
     compileOnly 'org.projectlombok:lombok:1.18.34'
     compileOnly "maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp"
