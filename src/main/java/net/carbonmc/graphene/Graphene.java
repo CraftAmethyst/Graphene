@@ -22,7 +22,7 @@ import org.spongepowered.asm.launch.MixinBootstrap;
 public class Graphene {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "graphene";
-    public static final String VERSION = "2.1.1";
+    public static final String VERSION = "2.1.3";
     public static GrapheneClient grapheneClient;
 
     public Graphene() {

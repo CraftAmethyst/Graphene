@@ -1,6 +1,6 @@
 package net.carbonmc.graphene.engine.cull;
 
-import com.logisticscraft.occlusionculling.DataProvider;
+import graphene.com.logisticscraft.occlusionculling.DataProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;

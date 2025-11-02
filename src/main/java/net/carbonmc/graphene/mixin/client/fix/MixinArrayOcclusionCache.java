@@ -1,6 +1,6 @@
 package net.carbonmc.graphene.mixin.client.fix;
 
-import com.logisticscraft.occlusionculling.cache.ArrayOcclusionCache;
+import graphene.com.logisticscraft.occlusionculling.cache.ArrayOcclusionCache;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

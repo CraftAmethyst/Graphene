@@ -34,7 +34,11 @@ public class MixinPoseStack {
 
     @Inject(method = "pushPose", at = @At("HEAD"), cancellable = true)
     private void onPush(CallbackInfo ci) {
-        PoseStack.Pose top = this.poseStack.getLast();
+        PoseStack.Pose top = this.poseStack.peekLast();
+        if (top == null) {
+            top = createPose(new Matrix4f(), new Matrix3f());
+        }
+
         PoseStack.Pose reused = this.pool.pollLast();
 
         if (reused == null) {

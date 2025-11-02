@@ -1,7 +1,7 @@
 package net.carbonmc.graphene.engine.cull;
 
-import com.logisticscraft.occlusionculling.OcclusionCullingInstance;
-import com.logisticscraft.occlusionculling.util.Vec3d;
+import graphene.com.logisticscraft.occlusionculling.OcclusionCullingInstance;
+import graphene.com.logisticscraft.occlusionculling.util.Vec3d;
 import net.carbonmc.graphene.engine.cull.iface.BlockEntityVisibility;
 import net.carbonmc.graphene.engine.cull.iface.EntityVisibility;
 import net.minecraft.client.Camera;
@@ -16,9 +16,9 @@ public class AABBCullingManager {
     private static final double HITBOX_LIMIT = 10.0D;
     private static final double MANHATTAN_THRESHOLD = 1.732;
     private static final long CAMERA_UPDATE_INTERVAL = 50;
-    private static final long DISTANCE_UPDATE_INTERVAL = 500;
+    private static final long DISTANCE_UPDATE_INTERVAL = 200;
     private static final double RESET_DISTANCE_THRESHOLD = 2.0;
-    private static final long MIN_RESET_INTERVAL = 1000;
+    private static final long MIN_RESET_INTERVAL = 1500;
     private final OcclusionCullingInstance occlusionCulling;
     private final CullCache cullCache = new CullCache();
     private final Minecraft mc;

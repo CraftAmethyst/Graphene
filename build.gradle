@@ -30,6 +30,7 @@ java {
     modularity.inferModulePath = true
 }
 repositories {
+    mavenLocal()
     maven {
         name = "CurseMaven"
         url = "https://www.cursemaven.com"
@@ -44,6 +45,7 @@ repositories {
     maven { url = 'https://maven.minecraftforge.net/' }
     maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
     maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://repo.syncleus.com/maven' }
     maven { url = 'https://jitpack.io' }
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url = 'https://libraries.minecraft.net/' }
@@ -53,6 +55,7 @@ repositories {
     }
     maven { url 'https://repo.codemc.io/repository/maven-public/' }
     mavenCentral()
+    maven { url = uri("${rootProject.buildDir}/local-repo") }
 }
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
@@ -99,7 +102,40 @@ minecraft {
         }
     }
 }
+tasks.register('installLocalJars') {
+    doLast {
+        def repo = file("${buildDir}/local-repo")
+        def groupPath = 'graphene/com/logisticscraft'
+        def artifactId = 'occlusionculling'
+        def version = '0.0.8-SNAPSHOT'
+        def pomDir = file("$repo/$groupPath/$artifactId/$version")
+        pomDir.mkdirs()
 
+        def jarFile = file('lib/occlusionculling-0.0.8-SNAPSHOT.jar')
+        if (!jarFile.exists()) throw new GradleException("本地 jar 不存在：${jarFile.absolutePath}")
+
+        new File(pomDir, "${artifactId}-${version}.jar").bytes = jarFile.bytes
+        new File(pomDir, "${artifactId}-${version}.pom").text = """
+            <project>
+              <modelVersion>4.0.0</modelVersion>
+              <groupId>graphene.com.logisticscraft</groupId>
+              <artifactId>$artifactId</artifactId>
+              <version>$version</version>
+            </project>
+        """.stripIndent()
+        println "[installLocalJars] 已生成本地仓库：${pomDir.absolutePath}"
+    }
+}
+
+tasks.named('jarJar') {
+    dependsOn 'installLocalJars'
+    doFirst {
+        def repo = file("${buildDir}/local-repo")
+        if (!file("$repo/graphene/com/logisticscraft/occlusionculling/0.0.8-SNAPSHOT/occlusionculling-0.0.8-SNAPSHOT.jar").exists()) {
+            throw new GradleException("本地仓库还没有 occlusionculling jar，installLocalJars 可能没执行成功！")
+        }
+    }
+}
 mixin {
     add sourceSets.main, "graphene.refmap.json"
     config "graphene.mixins.json"
@@ -113,7 +149,9 @@ dependencies {
 
     implementation files('lib/cloth.jar')
     implementation files('lib/ae2wtlib.jar')
+    implementation files('lib/occlusionculling-0.0.8-SNAPSHOT.jar')
     implementation 'com.esotericsoftware:kryo:5.6.2'
+    implementation 'org.jocl:jocl:2.0.5'
     implementation 'org.joml:joml:1.10.5'
     implementation 'org.spongepowered:mixin:0.8.5'
     implementation "com.github.ben-manes.caffeine:caffeine:3.2.0"
@@ -124,10 +162,15 @@ dependencies {
     implementation files('lib/1.jar')
     implementation "com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT"
 
+    jarJar("org.jocl:jocl:2.0.5") {
+        jarJar.ranged(it, "[2.0.5,3.3.0)")
+    }
+
     jarJar("com.github.ben-manes.caffeine:caffeine:3.2.0") {
         jarJar.ranged(it, "[3.2.0,3.3.0)")
     }
-    jarJar("com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT") {
+
+    jarJar("graphene.com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT") {
         jarJar.ranged(it, "[0.0.8,1.0.0)")
     }
     jarJar("com.esotericsoftware:kryo:5.6.2") {

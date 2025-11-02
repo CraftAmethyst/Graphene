@@ -47,6 +47,9 @@
     "net/carbonmc/graphene/mixin/client/renderer/reflex/ReflexSchedulerMixin": {
       "render": "Lnet/minecraft/client/renderer/GameRenderer;m_109093_(FJZ)V"
     },
+    "net/carbonmc/graphene/mixin/LivingEntityCollisionMixin": {
+      "pushEntities": "Lnet/minecraft/world/entity/LivingEntity;m_6138_()V"
+    },
     "net/carbonmc/graphene/mixin/client/renderer/culling/LeafRenderMixin": {
       "shouldRenderFace": "Lnet/minecraft/world/level/block/Block;m_152444_(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;Lnet/minecraft/core/BlockPos;)Z"
     },
@@ -136,6 +139,10 @@
       "init": "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;m_7856_()V",
       "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;addRenderableWidget(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;": "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;m_142416_(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;"
     },
+    "net/carbonmc/graphene/mixin/ServerLevelCollisionMixin": {
+      "Lnet/minecraft/server/level/ServerLevel;tickBlockEntities()V": "Lnet/minecraft/server/level/ServerLevel;m_46463_()V",
+      "tick": "Lnet/minecraft/server/level/ServerLevel;m_8793_(Ljava/util/function/BooleanSupplier;)V"
+    },
     "net/carbonmc/graphene/mixin/stack/fix/BucketItem": {
       "use": "Lnet/minecraft/world/item/BucketItem;m_7203_(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;",
       "Lnet/minecraft/world/item/BucketItem;getEmptySuccessItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/item/ItemStack;": "Lnet/minecraft/world/item/BucketItem;m_40699_(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/item/ItemStack;"
@@ -189,6 +196,9 @@
       },
       "net/carbonmc/graphene/mixin/client/renderer/reflex/ReflexSchedulerMixin": {
         "render": "Lnet/minecraft/client/renderer/GameRenderer;m_109093_(FJZ)V"
+      },
+      "net/carbonmc/graphene/mixin/LivingEntityCollisionMixin": {
+        "pushEntities": "Lnet/minecraft/world/entity/LivingEntity;m_6138_()V"
       },
       "net/carbonmc/graphene/mixin/client/renderer/culling/LeafRenderMixin": {
         "shouldRenderFace": "Lnet/minecraft/world/level/block/Block;m_152444_(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;Lnet/minecraft/core/BlockPos;)Z"
@@ -278,6 +288,10 @@
       "net/carbonmc/graphene/mixin/client/lang/uimixin": {
         "init": "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;m_7856_()V",
         "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;addRenderableWidget(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;": "Lnet/minecraft/client/gui/screens/LanguageSelectScreen;m_142416_(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;"
+      },
+      "net/carbonmc/graphene/mixin/ServerLevelCollisionMixin": {
+        "Lnet/minecraft/server/level/ServerLevel;tickBlockEntities()V": "Lnet/minecraft/server/level/ServerLevel;m_46463_()V",
+        "tick": "Lnet/minecraft/server/level/ServerLevel;m_8793_(Ljava/util/function/BooleanSupplier;)V"
       },
       "net/carbonmc/graphene/mixin/stack/fix/BucketItem": {
         "use": "Lnet/minecraft/world/item/BucketItem;m_7203_(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;",
